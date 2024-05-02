@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.l": "c",
+        "inputreader.h": "c",
+        "defines.h": "c",
+        "board.h": "c",
+        "manhatan.h": "c",
+        "manhattan.h": "c"
+    }
+}
