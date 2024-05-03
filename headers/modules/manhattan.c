@@ -4,6 +4,7 @@
 #include "../manhattan.h"
 #include <stdlib.h>
 #include <stdio.h>
+
 int calculate_manhathan(board *state,int print)
 {
     int i,j;

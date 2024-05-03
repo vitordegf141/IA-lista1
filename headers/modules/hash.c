@@ -1,16 +1,21 @@
 #include "../hash.h"
 #include "../board.h"
+
+int primes[]={7,11,13,17,19,23,29,31,37,41,43,47,53,59};
 unsigned long hash(char *name)
 {
     unsigned long sum =0;
     for (int j=0;name[j]!='\0';j++)
     {
-        sum += name[j];
+        sum += name[j]*primes[j];
+        sum = sum << 5;
     }
-    sum = sum *137;
     return sum % TABLE_SIZE;
 }
 
+int collisions=0;
+int non_collisions=0;
+int nexts_searchs=0;
 void copy_name(char *dest,char *origin){
     int i;
     for(i=0;i<board_size;i++)
@@ -68,6 +73,7 @@ int next_has_simbol(Hash_node *simbol_root,char *name)
 }
 
 void insert_in_next( Hash_node *simbol_root,char *new_simbol){
+    nexts_searchs++;
     if(simbol_root == NULL || new_simbol == NULL)
         return;
     else{
@@ -83,8 +89,10 @@ void insert_in_next( Hash_node *simbol_root,char *new_simbol){
     }
 }
 
-void print_hashtable()
+void print_hashtable(int do_print)
 {
+    if(do_print == 0)
+        return;
     int i;
     printf("\nbegin\n");
     for(i=0;i<TABLE_SIZE;i++)
@@ -100,6 +108,7 @@ int insert_simbol(char *name){
         return 0;
     unsigned long computed_hash = hash(name);
     if(hashtable[computed_hash] != NULL){
+        collisions++;
         if(cmp_name(hashtable[computed_hash]->name,name) == 0)
         {
             return 1;
@@ -111,6 +120,7 @@ int insert_simbol(char *name){
     }
     else
     {
+        non_collisions++;
         Hash_node *new_simbol=create_simbol(name);
         hashtable[computed_hash]=new_simbol;
         return 1;
@@ -131,4 +141,10 @@ int has_simbol(char *name){
     {
         return 0;
     }
+}
+void print_colissions(int do_print){
+    if(do_print!=0)
+        printf("number of colissions = %d non colissions= %d searchs in nexts= %d\n",collisions,non_collisions,nexts_searchs);
+    //106106387
+    //106106327
 }

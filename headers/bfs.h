@@ -5,6 +5,7 @@
 #include "manhattan.h"
 #include "queue.h"
 #include "hash.h"
+#include "result.h"
 int execute_bfs(board *inicial_board);
 
 

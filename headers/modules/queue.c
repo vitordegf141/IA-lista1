@@ -1,7 +1,7 @@
 #ifndef C_QUEUE
 #define C_QUEUE
 
-#define SIZE 100000
+#define SIZE 200000
 #include "../queue.h"
 board *inp_arr[SIZE];
 int Rear = - 1;

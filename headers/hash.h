@@ -1,7 +1,7 @@
 #ifndef HEADER_HASH
 #define HEADER_HASH
 
-#define TABLE_SIZE 997
+#define TABLE_SIZE 87131
 #define EH_IDENTIFICADOR 1
 #define EH_LITERAL 2
 #include <stdio.h>
@@ -22,8 +22,9 @@ int next_has_simbol(Hash_node *simbol_root,char *name);
 int has_simbol(char *name);
 Hash_node *create_simbol(char *simbol_name);
 void insert_in_next( Hash_node *simbol_root,char *new_simbol);
-void print_hashtable();
+void print_hashtable(int do_print);
 int insert_simbol(char *name);
+void print_colissions(int do_print);
 void initHashTable();
 
 #endif
