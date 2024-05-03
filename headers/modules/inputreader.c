@@ -1,4 +1,4 @@
-
+// reads the input and transform it into structs
 #ifndef C_INPUTREADER
 #define C_INPUTREADER
 

@@ -1,3 +1,4 @@
+//implement a queue on array
 #ifndef C_QUEUE
 #define C_QUEUE
 

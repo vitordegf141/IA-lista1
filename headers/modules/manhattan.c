@@ -1,3 +1,4 @@
+// implement manhathan distance
 #ifndef C_MANHATHAN
 #define C_MANHATHAN
 

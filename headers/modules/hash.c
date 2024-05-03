@@ -1,3 +1,6 @@
+
+// implement a hashtable on array 
+
 #include "../hash.h"
 #include "../board.h"
 

@@ -1,3 +1,5 @@
+//implement resut struct to keep and show the results'
+
 #ifndef C_RESULT
 #define C_RESULT
 

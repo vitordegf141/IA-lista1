@@ -1,5 +1,5 @@
 
-
+//implements the board struct, calculate moves and gather state information
 #ifndef C_BOARD
 #define C_BOARD
 

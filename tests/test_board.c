@@ -1,3 +1,5 @@
+// non part of the code, just for testing
+
 #include <stdio.h>
 #include "../headers/board.h"
 

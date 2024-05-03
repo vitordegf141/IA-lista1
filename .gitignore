@@ -1,3 +1,5 @@
 objects/*.o
+tests/run_tests/*
 main
 main
+.vscode/settings.json

@@ -1,3 +1,4 @@
+// non part of the code, just for testing
 
 #include <stdio.h>
 #include "../headers/manhattan.h"

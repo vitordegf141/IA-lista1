@@ -1,3 +1,5 @@
+// implement BFS algorithm
+
 #ifndef C_BFS
 #define C_BFS
 
