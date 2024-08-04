@@ -5,16 +5,28 @@
 #include "../board.h"
 
 int primes[]={7,11,13,17,19,23,29,31,37,41,43,47,53,59};
+void print_name_board(char *name){
+    for (int j=0;j<17;j++)
+        {
+            printf("%c",name[j]+48);
+        }
+}
 unsigned long hash(char *name)
 {
     unsigned long sum =0;
-    for (int j=0;name[j]!='\0';j++)
+    for (int j=0;j<17;j++)
     {
-        sum += name[j]*primes[j];
+        sum += name[j]*primes[j]+1;
         sum = sum << 5;
     }
-    return sum % TABLE_SIZE;
+    unsigned long result=sum % TABLE_SIZE;
+    //printf("name = ");
+    //print_name_board(name);
+    //printf(" hash = %ld\n ",result);./
+    return result;
 }
+
+
 
 int collisions=0;
 int non_collisions=0;
@@ -38,10 +50,11 @@ int cmp_name( char *dest,char *origin){
 
 void initHashTable()
 {
-    int i;
-    for(i=0;i<TABLE_SIZE;i++)
+    int i,j;
+    for(i=0;i<BOARD_SIZE;i++)
     {
-        hashtable[i]=NULL;
+        for(j=0;j<TABLE_SIZE;j++ )
+            hashtable[i][j]=NULL;
     }
 }
 
@@ -96,12 +109,16 @@ void print_hashtable(int do_print)
 {
     if(do_print == 0)
         return;
-    int i;
+    int i,j;
     printf("\nbegin\n");
-    for(i=0;i<TABLE_SIZE;i++)
+    for(i=0;i<BOARD_SIZE;i++)
     {
-        if(hashtable[i]!=NULL)
-            printf("\n\t%d\t%s",i,hashtable[i]->name);
+        for(j=0;j<TABLE_SIZE;j++)
+        {
+            if(hashtable[i][j]!=NULL)
+                printf("\n\t%d\t%s",i,hashtable[i][j]->name);
+        }
+        
     }
     printf("\nend\n");
 }
@@ -110,14 +127,14 @@ int insert_simbol(char *name){
     if(name == NULL)
         return 0;
     unsigned long computed_hash = hash(name);
-    if(hashtable[computed_hash] != NULL){
+    if(hashtable[name[0]][computed_hash] != NULL){
         collisions++;
-        if(cmp_name(hashtable[computed_hash]->name,name) == 0)
+        if(cmp_name(hashtable[name[0]][computed_hash]->name,name) == 0)
         {
             return 1;
         }
         else{
-            insert_in_next(hashtable[computed_hash],name);
+            insert_in_next(hashtable[name[0]][computed_hash],name);
             return 1;
         }
     }
@@ -125,7 +142,7 @@ int insert_simbol(char *name){
     {
         non_collisions++;
         Hash_node *new_simbol=create_simbol(name);
-        hashtable[computed_hash]=new_simbol;
+        hashtable[name[0]][computed_hash]=new_simbol;
         return 1;
     }
 
@@ -134,11 +151,11 @@ int insert_simbol(char *name){
 }
 int has_simbol(char *name){
     unsigned long computed_hash = hash(name);
-    if(hashtable[computed_hash] != NULL){
-        if(cmp_name(hashtable[computed_hash]->name,name) == 0)
+    if(hashtable[name[0]][computed_hash] != NULL){
+        if(cmp_name(hashtable[name[0]][computed_hash]->name,name) == 0)
             return 1;
         else 
-            return next_has_simbol(hashtable[computed_hash],name);
+            return next_has_simbol(hashtable[name[0]][computed_hash],name);
     }
     else
     {

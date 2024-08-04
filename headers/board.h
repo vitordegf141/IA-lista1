@@ -4,8 +4,11 @@
 #ifndef H_BOARD
 #define H_BOARD
 
+
+#define STATE_SIZE 17
+
 typedef struct board_struct{
-    char state[17];
+    char state[STATE_SIZE];
     int blankposition;
     int heurisc_value;
     int cost;

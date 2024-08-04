@@ -2,7 +2,7 @@
 #ifndef C_QUEUE
 #define C_QUEUE
 
-#define SIZE 200000
+#define SIZE 10000000
 #include "../queue.h"
 board *inp_arr[SIZE];
 int Rear = - 1;
@@ -12,8 +12,8 @@ void pushQueue(board *state)
 {
     if (Rear == SIZE - 1)
     {
-        printf("Overflow \n");
-        getchar();
+        printf("Queue Overflow \n");
+        return;
     }
        
     else
