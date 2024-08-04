@@ -22,6 +22,7 @@ int get_algorithm_from_input(char *input)
     if(!strcmp(input,"-gbfs"))
         return gbfs;
     printf("unknow algorithm\n");
+    return 0;
 }
 
 

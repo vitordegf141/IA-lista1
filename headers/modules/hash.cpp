@@ -80,12 +80,12 @@ int next_has_simbol(Hash_node *simbol_root,char *name)
         return NULL;
     }    
     
-    Hash_node *new = malloc(sizeof( Hash_node));
+    Hash_node *newe = (Hash_node *) malloc(sizeof( Hash_node));
     int i;
-    new->name = malloc(sizeof(char)*(board_size+1));
-    copy_name(new->name,simbol_name);
-    new->next=NULL;
-    return new;
+    newe->name = (char *) malloc(sizeof(char)*(board_size+1));
+    copy_name(newe->name,simbol_name);
+    newe->next=NULL;
+    return newe;
 }
 
 void insert_in_next( Hash_node *simbol_root,char *new_simbol){
