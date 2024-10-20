@@ -7,7 +7,7 @@
 board *inp_arr[SIZE];
 int Rear = - 1;
 int Front = - 1;
-
+d
 void pushQueue(board *state)
 {
     if (Rear == SIZE - 1)

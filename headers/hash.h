@@ -1,7 +1,7 @@
 #ifndef HEADER_HASH
 #define HEADER_HASH
 
-#define TABLE_SIZE 187131
+#define TABLE_SIZE 18731
 #define BOARD_SIZE 16
 #define EH_IDENTIFICADOR 1
 #define EH_LITERAL 2
@@ -18,7 +18,7 @@ typedef struct Hnode
 
 Hash_node * hashtable[BOARD_SIZE][TABLE_SIZE];
 
-unsigned long hash(char *name);
+unsigned long hash(char *str);
 int next_has_simbol(Hash_node *simbol_root,char *name);
 int has_simbol(char *name);
 Hash_node *create_simbol(char *simbol_name);

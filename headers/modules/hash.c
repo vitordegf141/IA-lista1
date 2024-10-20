@@ -11,21 +11,22 @@ void print_name_board(char *name){
             printf("%c",name[j]+48);
         }
 }
-unsigned long hash(char *name)
-{
-    unsigned long sum =0;
-    for (int j=0;j<17;j++)
-    {
-        sum += name[j]*primes[j]+1;
-        sum = sum << 5;
-    }
-    unsigned long result=sum % TABLE_SIZE;
-    //printf("name = ");
-    //print_name_board(name);
-    //printf(" hash = %ld\n ",result);./
-    return result;
-}
 
+unsigned long hash(char *str)
+{
+    unsigned long hash = 5381;
+    int c;
+
+    int i;
+    for(i=0;i<BOARD_SIZE;i++)
+    {
+        c=str[i];
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+    }
+        
+
+    return hash%TABLE_SIZE;
+}
 
 
 int collisions=0;
@@ -105,18 +106,53 @@ void insert_in_next( Hash_node *simbol_root,char *new_simbol){
     }
 }
 
+void get_good_string(char *good_string,char *bad_string)
+{
+    int i;
+    for(i=0;i<BOARD_SIZE;i++)
+    {
+        good_string[i] = bad_string[i] + 48;
+    }
+}
+
+void print_board2(char *board)
+{
+    char good_string[BOARD_SIZE];
+    get_good_string(good_string,board);
+    printf("%s",good_string);
+}
+
+void print_next(Hash_node *next)
+{
+    if(next ==NULL)
+        return;
+    else
+    {
+        printf(" - ");
+        print_board2(next->name);
+        print_next(next->next);
+    }
+}
 void print_hashtable(int do_print)
 {
     if(do_print == 0)
         return;
     int i,j;
+    
+
     printf("\nbegin\n");
     for(i=0;i<BOARD_SIZE;i++)
     {
         for(j=0;j<TABLE_SIZE;j++)
         {
             if(hashtable[i][j]!=NULL)
-                printf("\n\t%d\t%s",i,hashtable[i][j]->name);
+            {
+                
+                printf("\n\t%d\t%ld\t",i,hash(hashtable[i][j]->name));
+                print_board2(hashtable[i][j]->name);
+                print_next(hashtable[i][j]->next);
+            }
+                
         }
         
     }
@@ -164,7 +200,22 @@ int has_simbol(char *name){
 }
 void print_colissions(int do_print){
     if(do_print!=0)
+    {
         printf("number of colissions = %d non colissions= %d searchs in nexts= %d\n",collisions,non_collisions,nexts_searchs);
+        int i,j, count =0;
+        for(i=0;i<BOARD_SIZE;i++)
+        {
+            for(j=0;j<TABLE_SIZE;j++)
+            {
+                if(hashtable[i][j]==NULL)
+                    count++;
+            }
+            
+        }
+        printf(" number of empty spaces = %d\n",count);
+    }   
+        
+
     //106106387
     //106106327
 }

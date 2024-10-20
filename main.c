@@ -31,6 +31,10 @@ int main(int argc, char *argv[]){
         for(i=0;i<number_of_boards;i++)
             execute_bfs(&matrixes.boards[i]);
         break;
+    case idfs:
+        for(i=0;i<number_of_boards;i++)
+            execute_bfs(&matrixes.boards[i]);
+        break;
     
     default:
         break;
