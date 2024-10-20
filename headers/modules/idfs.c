@@ -59,4 +59,25 @@ int execute_idfs(board *inicial_board)
     return 1;
 }
 
+
+int DLS(board *currentBoard, int depth, int maxdepth, result *res){
+    if(isGoalstate(currentBoard))
+    {
+        calculate_result(res,currentBoard->cost);
+        print_result(&res);
+        queue_reset();
+        return 1;
+    }
+    if(depth == maxdepth)
+        return 0;
+    next_boards nexts;
+    board *nextBoard;
+    int i;
+    calculate_next_boards(&nexts,currentBoard);
+    for(i=0;i<nexts.number_of_moves;i++){
+        nextBoard = nexts.next[i];
+        DLS(nextBoard,depth+1,maxdepth,res);
+    }
+    
+}
 #endif
