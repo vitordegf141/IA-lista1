@@ -30,6 +30,6 @@ int board_side_size;
 int isGoalstate(board *state);
 int findblankposition(board *state);
 void print_board(board *state);
-next_boards *calculate_next_boards_printf_possible(board *state);
-next_boards *calculate_next_boards(next_boards *nexts, board *state);
+void calculate_next_boards_printf_possible(board *state);
+void calculate_next_boards(next_boards *nexts, board *state);
 #endif

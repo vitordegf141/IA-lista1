@@ -25,7 +25,7 @@ int findblankposition(board *state)
     return i;
 }
 
-next_boards *calculate_next_boards_printf_possible(board *state)
+void calculate_next_boards_printf_possible(board *state)
 {
     int x = (int)state->blankposition / board_side_size;
     int y = state->blankposition % board_side_size;
@@ -74,7 +74,7 @@ void add_at_next(next_boards *nexts, board *newstate)
 
 }
 
-next_boards *calculate_next_boards(next_boards *nexts, board *state)
+void calculate_next_boards(next_boards *nexts, board *state)
 {
     int x = (int)state->blankposition / board_side_size;
     int y = state->blankposition % board_side_size;
