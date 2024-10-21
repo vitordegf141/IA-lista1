@@ -181,7 +181,7 @@ void print_hashtable(int do_print)
     
 
     printf("\nbegin\n");
-    for(i=0;i<BOARD_SIZE;i++)
+    for(i=0;i<TABLE_SIZING;i++)
     {
         for(j=0;j<TABLE_SIZE;j++)
         {
@@ -262,7 +262,7 @@ void print_bigcolissiongs(int do_print)
                 }
                 
             }
-            int free_space = count/329491L;
+            int free_space = count/3294912L;
             printf(" number of empty spaces = %d percetage free = %d \n",count, free_space);
         }
     }
@@ -274,7 +274,7 @@ void print_colissions(int do_print){
     {
         printf("number of colissions = %d non colissions= %d searchs in nexts= %d\n",collisions,non_collisions,nexts_searchs);
         int i,j, count =0;
-        for(i=0;i<BOARD_SIZE;i++)
+        for(i=0;i<TABLE_SIZING;i++)
         {
             for(j=0;j<TABLE_SIZE;j++)
             {

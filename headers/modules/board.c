@@ -9,7 +9,7 @@
 int isGoalstate(board *state)
 {
     int i;
-    for (i = 0; i < board_size; i++)
+    for (i = 1; i < board_size; i++)
         if (i != state->state[i])
             return 0;
     return 1;

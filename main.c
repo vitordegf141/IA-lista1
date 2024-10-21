@@ -25,6 +25,12 @@ int main(int argc, char *argv[]){
     all_boards matrixes;
     int number_of_boards = alt_method(argc,argv,&matrixes);
     int i;
+    //for(i=0;i<number_of_boards;i++)
+    //{
+    //    print_board(&matrixes.boards[i]);
+    //    getchar();
+    //}
+    
     switch (algorithm)
     {
     case bfs:

@@ -158,6 +158,7 @@ int alt_method(int argc,char *argv[], all_boards *boards)
     }
         
     else if(is_sixteen){
+        
         number_of_matrix = input_lenght/16;
         board_size=16;
         board_side_size=4;
