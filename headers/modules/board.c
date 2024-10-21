@@ -82,14 +82,15 @@ void calculate_next_boards(next_boards *nexts, board *state)
     int up_new = state->blankposition - board_side_size;
     int right_new = y + 1;
     int left_new = y - 1;
-    if (right_new < board_side_size)
-        add_at_next(nexts,make_move(state,state->blankposition+1));
     if (up_new >= 0)
         add_at_next(nexts,make_move(state,up_new));
-    if (down_new < board_size)
-        add_at_next(nexts,make_move(state,down_new));
     if (left_new >= 0)
         add_at_next(nexts,make_move(state,state->blankposition-1));
+    if (right_new < board_side_size)
+        add_at_next(nexts,make_move(state,state->blankposition+1));
+    if (down_new < board_size)
+        add_at_next(nexts,make_move(state,down_new));
+    
 }
 
 void print_board(board *state)
