@@ -8,4 +8,5 @@ void pushQueue(board *state);
 board *popQueue();
 int queue_is_empty();
 void queue_reset();
+void print_queue();
 #endif

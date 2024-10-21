@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "../headers/board.h"
 
-
+// gcc test_board.c "../objects/board.o" -o test
 void assert(int value, int expected)
 {
     if(value==expected)
@@ -22,6 +22,18 @@ int test_goal_board()
         goal_board.state[i]=i;
     int is_goal = isGoalstate(&goal_board);
     printf("testing isGoalState is goal:");
+    assert(is_goal,1);
+}
+
+int test_goal_board_for15()
+{
+    board_size=16;
+    board goal_board;
+    int i;
+    for(i=0;i<board_size;i++)
+        goal_board.state[i]=i;
+    int is_goal = isGoalstate(&goal_board);
+    printf("testing isGoalState for 15 is goal:");
     assert(is_goal,1);
 }
 
@@ -225,4 +237,5 @@ int main()
     test_next_boards2();
     test_next_boards3();
     test_next_boards4();
+    test_goal_board_for15();
 }

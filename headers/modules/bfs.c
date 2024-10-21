@@ -32,12 +32,13 @@ int execute_bfs(board *inicial_board)
         
     while(!queue_is_empty())
     {
+        print_bigcolissiongs(1);
         currentBoard = popQueue();
         expanded_nodes++;
         nexts.number_of_moves=0;
         insert_simbol(currentBoard->state);
         add_node_to_result(&res,0);
-        calculate_next_boards(&nexts,currentBoard);        
+        calculate_next_boards(&nexts,currentBoard);   
         for(i=0;i<nexts.number_of_moves;i++){
             succesorBoard = nexts.next[i];
             
