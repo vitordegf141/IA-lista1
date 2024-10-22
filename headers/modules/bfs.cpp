@@ -2,14 +2,20 @@
 
 #ifndef C_BFS
 #define C_BFS
+extern "C"
+{
+    #include "../bfs.h"
+    #include "../queue.h"
+    #include "../board.h"
+    #include "../manhattan.h"
+    #include "../hash.h"
+}
 
-#include "../bfs.h"
-#include "../queue.h"
-#include "../board.h"
-#include "../manhattan.h"
-#include "../hash.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <unordered_set>
+#include <string>
+#include <iostream>
 
 int execute_bfs(board *inicial_board)
 {
@@ -19,9 +25,12 @@ int execute_bfs(board *inicial_board)
     board *currentBoard;
     board *succesorBoard;
     int expanded_nodes =0;
-    initHashTable();
+    std::unordered_set<std::string> mySet;
+    char char_temp[17];
     init_result(&res,calculate_manhathan(inicial_board,0));
     inicial_board->cost=0;
+    if(!queue_is_empty())
+        printf("QUEUE should be empty now");
     pushQueue(inicial_board);
     if(isGoalstate(inicial_board))
     {
@@ -29,18 +38,24 @@ int execute_bfs(board *inicial_board)
         print_result(&res);
         return 0;
     }
-        
+    int k=0;
+    int cc;
     while(!queue_is_empty())
     {
+        k++;
         currentBoard = popQueue();
         expanded_nodes++;
         nexts.number_of_moves=0;
-        insert_simbol(currentBoard->state);
+        board_to_string(currentBoard->state,char_temp);
+        std::string str(char_temp);
+        mySet.insert(str);
         add_node_to_result(&res,0);
-        calculate_next_boards(&nexts,currentBoard);        
+        calculate_next_boards(&nexts,currentBoard);      
         for(i=0;i<nexts.number_of_moves;i++){
             succesorBoard = nexts.next[i];
-            
+            board_to_string(succesorBoard->state,char_temp);
+            std::string str2(char_temp);
+            cc=mySet.count(str2);
             if(isGoalstate(succesorBoard))
             {
                 calculate_result(&res,succesorBoard->cost);
@@ -48,15 +63,21 @@ int execute_bfs(board *inicial_board)
                 queue_reset();
                 break;
             }
-            if(!has_simbol(succesorBoard->state)){
+            
+            if(cc==0){
                 pushQueue(succesorBoard);
             }
+            else
+            {
+                free(succesorBoard);
+            }
         }
+        //free(currentBoard);
+        //printf("post free currentBoard board\n");
+        //fflush(stdout);
     }
-    print_hashtable(0);
-    print_colissions(1);
-    queue_reset();
+    //print_hashtable(0);
+    //print_colissions(1);
     return 1;
 }
-
 #endif

@@ -19,6 +19,16 @@ int isGoalstate(board *state)
     return 1;
 }
 
+void board_to_string(char *cin,char *out)
+{
+    int i=0;
+    for(i=0;i<16;i++)
+    {
+        out[i] = cin[i]+48;
+    }
+    out[16]='\0';
+}
+
 int findblankposition(board *state)
 {
     int i;

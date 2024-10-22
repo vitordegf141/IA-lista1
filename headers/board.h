@@ -29,6 +29,7 @@ extern int board_size;
 extern int board_side_size;
 int isGoalstate(board *state);
 int findblankposition(board *state);
+void board_to_string(char *state,char *outstring);
 void print_board(board *state);
 void calculate_next_boards_printf_possible(board *state);
 void calculate_next_boards(next_boards *nexts, board *state);
