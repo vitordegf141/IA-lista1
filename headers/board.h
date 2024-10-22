@@ -25,8 +25,8 @@ typedef struct next_boards_struct{
     int number_of_moves;
 } next_boards;
 
-int board_size;
-int board_side_size;
+extern int board_size;
+extern int board_side_size;
 int isGoalstate(board *state);
 int findblankposition(board *state);
 void print_board(board *state);

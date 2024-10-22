@@ -16,7 +16,7 @@ typedef struct Hnode
     struct Hnode *next;
 } Hash_node;
 
-Hash_node * hashtable[BOARD_SIZE][TABLE_SIZE];
+extern Hash_node * hashtable[BOARD_SIZE][TABLE_SIZE];
 
 unsigned long hash(char *name);
 int next_has_simbol(Hash_node *simbol_root,char *name);

@@ -4,6 +4,8 @@
 #include "../hash.h"
 #include "../board.h"
 
+Hash_node * hashtable[BOARD_SIZE][TABLE_SIZE];
+
 int primes[]={7,11,13,17,19,23,29,31,37,41,43,47,53,59};
 void print_name_board(char *name){
     for (int j=0;j<17;j++)

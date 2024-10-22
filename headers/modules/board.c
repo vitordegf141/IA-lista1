@@ -6,6 +6,10 @@
 #include "../board.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+int board_side_size;
+int board_size;
+
 int isGoalstate(board *state)
 {
     int i;
