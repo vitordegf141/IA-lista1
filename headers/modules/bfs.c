@@ -47,7 +47,7 @@ int execute_bfs(board *inicial_board)
                 calculate_result(&res,succesorBoard->cost);
                 print_result(&res);
                 queue_reset();
-                break;
+                return 1 ;
             }
             if(!has_simbol(succesorBoard->state)){
                 pushQueue(succesorBoard);
