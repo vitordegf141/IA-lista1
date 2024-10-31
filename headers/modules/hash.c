@@ -91,7 +91,11 @@ void initHashTable()
     for(i=0;i<TABLE_SIZING;i++)
     {
         for(j=0;j<TABLE_SIZE;j++ )
-            hashtable[i][j]=NULL;
+            if(hashtable[i][j] != NULL){
+                free(hashtable[i][j]);
+                hashtable[i][j]=NULL;
+            }
+            
     }
 }
 

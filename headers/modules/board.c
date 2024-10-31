@@ -76,6 +76,7 @@ void add_at_next(next_boards *nexts, board *newstate)
 
 next_boards *calculate_next_boards(next_boards *nexts, board *state)
 {
+    nexts->number_of_moves=0;
     int x = (int)state->blankposition / board_side_size;
     int y = state->blankposition % board_side_size;
     int down_new = state->blankposition + board_side_size;
