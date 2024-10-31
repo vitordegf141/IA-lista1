@@ -28,7 +28,7 @@ objects/queue.o: headers/modules/queue.c objects/board.o
 
 
 objects/bfs.o: objects/result.o objects/hash.o headers/modules/bfs.c objects/board.o objects/manhattan.o objects/queue.o
-	gcc objects/result.o objects/queue.o objects/board.o objects/manhattan.o objects/hash.o -o objects/bfs.o -c headers/modules/bfs.c
+	gcc  -o objects/bfs.o -c headers/modules/bfs.c
 
 clean:
 	rm objects/*

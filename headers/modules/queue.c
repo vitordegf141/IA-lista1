@@ -109,7 +109,14 @@ void free_all_queue(queue *queueS)
 {
     if(queueS == NULL)
         return;
+    if(queueS->object!=NULL)
+    {
+        free(queueS->object);
+        queueS->object=NULL;
+    }
+        
     free_all_queue(queueS->rear);
+    queueS->rear=NULL;
     free(queueS);
     return;
 }

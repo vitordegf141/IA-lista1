@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include "headers/inputreader.h"
 #include "headers/defines.h"
-#include "headers/board.h"
-#include "headers/manhattan.h"
 #include "headers/bfs.h"
 
 /*BFS-Graph, Iterative Deepening, A∗, IDA∗, Greedy Best-first Search*/
