@@ -35,7 +35,7 @@ void init_result(result *res, int inicial_heuristic){
 
 void add_node_to_result(result *res,int heurisctic)
 {
-    //res->total_heuristic +=heurisctic;
+    res->total_heuristic +=heurisctic;
     res->nodes_expanded++;
 }
 
