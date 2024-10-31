@@ -32,5 +32,6 @@ int findblankposition(board *state);
 void board_to_string(char *state,char *outstring);
 void print_board(board *state);
 void calculate_next_boards_printf_possible(board *state);
+int compare_boards(board *state1,board *state2);
 void calculate_next_boards(next_boards *nexts, board *state);
 #endif

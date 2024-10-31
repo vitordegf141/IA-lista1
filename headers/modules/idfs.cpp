@@ -19,59 +19,14 @@ extern "C"
 
 int execute_idfs(board *inicial_board)
 {
-    next_boards nexts;
-    int i, test_contains;
+    int i, maxdepth=0,found =0;
     result res;
-    board *currentBoard;
-    board *succesorBoard;
-    int expanded_nodes =0;
-    std::unordered_set<std::string> mySet;
-    char char_temp[17];
     init_result(&res,calculate_manhathan(inicial_board,0));
     inicial_board->cost=0;
-    if(!queue_is_empty())
-        printf("QUEUE should be empty now");
-    pushQueue(inicial_board);
-    if(isGoalstate(inicial_board))
+    while(found !=0 && maxdepth <100)
     {
-        calculate_result(&res,0);
-        print_result(&res);
-        return 0;
-    }
-    int k=0;
-    int cc;
-    while(!queue_is_empty())
-    {
-        k++;
-        currentBoard = popQueue();
-        expanded_nodes++;
-        nexts.number_of_moves=0;
-        board_to_string(currentBoard->state,char_temp);
-        std::string str(char_temp);
-        mySet.insert(str);
-        add_node_to_result(&res,0);
-        calculate_next_boards(&nexts,currentBoard);      
-        for(i=0;i<nexts.number_of_moves;i++){
-            succesorBoard = nexts.next[i];
-            board_to_string(succesorBoard->state,char_temp);
-            std::string str2(char_temp);
-            cc=mySet.count(str2);
-            if(isGoalstate(succesorBoard))
-            {
-                calculate_result(&res,succesorBoard->cost);
-                print_result(&res);
-                queue_reset();
-                break;
-            }
-            
-            if(cc==0){
-                pushQueue(succesorBoard);
-            }
-            else
-            {
-                free(succesorBoard);
-            }
-        }
+        maxdepth++;
+        found = dfs(inicial_board,0,maxdepth,&res);
     }
     return 1;
 }
@@ -80,6 +35,7 @@ int execute_idfs(board *inicial_board)
 int dfs(board *currentboard,int depth, int maxdepth,result *res)
 {
     next_boards nexts;
+    add_node_to_result(res,calculate_manhathan(currentboard,0));
     if(isGoalstate(currentboard))
     {
         calculate_result(res,currentboard->cost);
@@ -92,11 +48,15 @@ int dfs(board *currentboard,int depth, int maxdepth,result *res)
         return 0;
     }
     int i;
+    int found;
     nexts.number_of_moves=0;
     calculate_next_boards(&nexts,currentboard);
     for(i=0;i<nexts.number_of_moves;i++)
     {
-        
+        found = dfs(nexts.next[i],depth+1,maxdepth,res);
+        if(found == 1)
+            return found;
+        free(nexts.next[i]);
     }
 }
 

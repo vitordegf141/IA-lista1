@@ -24,18 +24,25 @@ void init_result(result *res, int inicial_heuristic){
     res->total_heuristic=0;
     res->average_heurisctic=0;
     res->inicial_heurisctic=inicial_heuristic;
+    res->otimal_cost=0;
+    res->time_passed=0;
+    res->final_time=0;
+    //printf("res->nodes_expanded before = %d \n",res->nodes_expanded);
+    //res->nodes_expanded++;
+    //printf("res->nodes_expanded after = %d \n",res->nodes_expanded);
+    //getchar();
 }
 
 void add_node_to_result(result *res,int heurisctic)
 {
-    res->total_heuristic +=heurisctic;
+    //res->total_heuristic +=heurisctic;
     res->nodes_expanded++;
 }
 
 void calculate_result(result *res, int otimal_cost)
 {
     stop_time_count(res);
-    res->time_passed = ((double)(res->final_time - res->inicial_time))/CLOCKS_PER_SEC;
+    res->time_passed = ((double)(res->final_time - res->inicial_time) +123)/CLOCKS_PER_SEC;
     if(res->nodes_expanded != 0)
         res->average_heurisctic = res->total_heuristic/ res->nodes_expanded;
     res->otimal_cost=otimal_cost;

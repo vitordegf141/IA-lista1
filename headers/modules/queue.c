@@ -39,7 +39,7 @@ void pushQueue(board *currentboard)
     if(Last == NULL)
     {
         printf("ERROR HAS OCCURED in PUSHING INTO QUEUE");
-        getchar();
+        fflush(stdout);
         return;
     }
     //created new last
@@ -70,7 +70,11 @@ board * popQueue()
     }
     board *state = First->object;
     if(state == NULL)
+    {
         printf("poping state that is NULL why\n");
+        fflush(stdout);
+    }
+        
     // in the case that there's only one element eg First's rear is empty or First is the same as Last
     if(First->rear == NULL || First == Last)
     {
@@ -120,6 +124,7 @@ void queue_reset()
     free_all_queue(First);
     First=NULL;
     Last=NULL;
+    queue_size=0;
 }
 
 void print_queue_in(queue *node, int i)
@@ -131,6 +136,12 @@ void print_queue_in(queue *node, int i)
     else
         printf("%d queue[%d] node's object is NOT NULL\n", i,node->queue_number);
     print_queue_in(node->rear,i+1);
+    
+}
+
+void print_size()
+{
+    printf("QUEUE size is = %d\n",queue_size);
 }
 
 void print_queue()
