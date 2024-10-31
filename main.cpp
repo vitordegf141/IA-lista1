@@ -1,17 +1,17 @@
 // main function,
 
-extern "C" {
+
     #include <stdio.h>
     #include <string.h>
     #include <stdlib.h>
+extern "C"{
     #include "headers/inputreader.h"
-    #include "headers/defines.h"
-    #include "headers/board.h"
-    #include "headers/manhattan.h"
-    #include "headers/result.h"
-    #include "headers/queue.h"
     #include "headers/bfs.h"
+    #include "headers/idfs.h"
+    #include "headers/defines.h"
 }
+    
+
 
 /*BFS-Graph, Iterative Deepening, A∗, IDA∗, Greedy Best-first Search*/
 /*-bfs, -idfs, -astar,-idastar, -gbfs,*/
@@ -35,7 +35,10 @@ int main(int argc, char *argv[]){
         for(i=0;i<number_of_boards;i++)
             execute_bfs(&matrixes.boards[i]);
         break;
-    
+    case idfs:
+        for(i=0;i<number_of_boards;i++)
+            execute_idfs(&matrixes.boards[i]);
+        break;
     default:
         break;
     }

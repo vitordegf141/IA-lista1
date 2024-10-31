@@ -1,5 +1,5 @@
-main: main.cpp objects/inputreader.o objects/board.o objects/manhattan.o objects/bfs.o objects/queue.o objects/hash.o
-	g++ objects/result.o objects/hash.o  objects/inputreader.o objects/board.o objects/queue.o objects/manhattan.o objects/bfs.o main.cpp -o  main 
+main: main.cpp objects/inputreader.o objects/board.o objects/manhattan.o objects/bfs.o objects/queue.o objects/hash.o objects/idfs.o
+	g++ objects/result.o objects/hash.o  objects/inputreader.o objects/board.o objects/queue.o objects/manhattan.o objects/bfs.o objects/idfs.o main.cpp -o main 
 
 test_board: tests/test_board.c objects/board.o
 	gcc objects/board.o tests/test_board.c -o  tests/run_tests/test_board
@@ -15,7 +15,6 @@ objects/board.o: headers/modules/board.c
 
 objects/manhattan.o: headers/modules/manhattan.c objects/board.o
 	gcc -o objects/manhattan.o -c headers/modules/manhattan.c
-	
 
 objects/hash.o: headers/modules/hash.c
 	gcc -o objects/hash.o -c headers/modules/hash.c
@@ -28,7 +27,10 @@ objects/queue.o: headers/modules/queue.c objects/board.o
 
 
 objects/bfs.o: objects/result.o objects/hash.o headers/modules/bfs.cpp objects/board.o objects/manhattan.o objects/queue.o
-	g++ objects/result.o objects/queue.o objects/board.o objects/manhattan.o objects/hash.o -o objects/bfs.o -c headers/modules/bfs.cpp
+	g++ -o objects/bfs.o -c headers/modules/bfs.cpp
+
+objects/idfs.o: objects/result.o objects/hash.o headers/modules/idfs.cpp objects/board.o objects/manhattan.o objects/queue.o
+	g++ -o objects/idfs.o -c headers/modules/idfs.cpp
 
 clean:
 	rm objects/*

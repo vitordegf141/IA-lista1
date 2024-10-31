@@ -90,7 +90,6 @@ board * popQueue()
         {
             printf("QUEUE is corrupt\n");
             fflush(stdout);
-            getchar();
         }
             
         free(First);

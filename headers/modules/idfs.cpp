@@ -1,10 +1,10 @@
 // implement BFS algorithm
 
-#ifndef C_BFS
-#define C_BFS
+#ifndef C_IDFS
+#define C_IDFS
 extern "C"
 {
-    #include "../bfs.h"
+    #include "../idfs.h"
     #include "../queue.h"
     #include "../board.h"
     #include "../manhattan.h"
@@ -17,13 +17,15 @@ extern "C"
 #include <string>
 #include <iostream>
 
+int dfs(board *currentboard,int depth, int maxdepth,result *res);
+
 int execute_idfs(board *inicial_board)
 {
     int i, maxdepth=0,found =0;
     result res;
     init_result(&res,calculate_manhathan(inicial_board,0));
     inicial_board->cost=0;
-    while(found !=0 && maxdepth <100)
+    while(found ==0 && maxdepth <100)
     {
         maxdepth++;
         found = dfs(inicial_board,0,maxdepth,&res);
@@ -50,6 +52,7 @@ int dfs(board *currentboard,int depth, int maxdepth,result *res)
     int i;
     int found;
     nexts.number_of_moves=0;
+    add_node_to_result(res,calculate_manhathan(currentboard,0));
     calculate_next_boards(&nexts,currentboard);
     for(i=0;i<nexts.number_of_moves;i++)
     {
@@ -58,6 +61,7 @@ int dfs(board *currentboard,int depth, int maxdepth,result *res)
             return found;
         free(nexts.next[i]);
     }
+    return 0;
 }
 
 #endif

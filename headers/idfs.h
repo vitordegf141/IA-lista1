@@ -1,5 +1,5 @@
-#ifndef H_BFS
-#define H_BFS
+#ifndef H_IDFS
+#define H_IDFS
 
 
     #include "board.h"
@@ -9,6 +9,6 @@
     #include "result.h"
 
 
-int execute_bfs(board *inicial_board);
+int execute_idfs(board *inicial_board);
 
 #endif
