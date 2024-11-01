@@ -1,7 +1,7 @@
 // implement BFS algorithm
 
-#ifndef C_ASTAR
-#define C_ASTAR
+#ifndef C_GBFS
+#define C_GBFS
 extern "C"
 {    
     #include "../queue.h"
@@ -10,7 +10,7 @@ extern "C"
     #include "../hash.h"
     #include "../result.h"
 }
-#include "../astar.hpp"
+#include "../gbfs.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unordered_set>
@@ -32,13 +32,9 @@ struct node_greater_than {
     }
 };
 
-int new_node_f;
 
-bool test_find(node *a)  {
-        return a->f == new_node_f;
-    }
 
-int execute_astar(board *inicial_board)
+int execute_gbfs(board *inicial_board)
 {
     next_boards nexts;
     result res;
@@ -53,7 +49,6 @@ int execute_astar(board *inicial_board)
     char char_temp[17] = {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
     std::vector<node*> open;
     inicial_board->cost=0;
-    std::string str2;
     std::unordered_set<std::string> explored;
     std::make_heap(open.begin(), open.end(),node_greater_than());
     node *root = (node *) malloc(sizeof(node));
@@ -61,10 +56,12 @@ int execute_astar(board *inicial_board)
     board *currentboard = NULL;
     board *succesorBoard = NULL;
     node *new_node;
+    int hull=0;
     root->f=0;
     root->state=inicial_board;
     open.push_back(root);
     std::push_heap(open.begin(), open.end(),node_greater_than());
+    std::string str2;
     while(!open.empty())
     {
         std::pop_heap(open.begin(), open.end(),node_greater_than());
@@ -80,9 +77,11 @@ int execute_astar(board *inicial_board)
         }
         board_to_string(currentboard->state,char_temp);
         std::string str(char_temp);
+        
         explored.insert(str);
         add_node_to_result(&res,calculate_manhathan(currentboard,0));
         calculate_next_boards(&nexts,currentboard);
+        hull++;
         for(i=0;i<nexts.number_of_moves;i++){
             
             succesorBoard = nexts.next[i];
@@ -98,24 +97,19 @@ int execute_astar(board *inicial_board)
                 explored.clear();
                 return 1;
             }
-            new_node_f = succesorBoard->cost + calculate_manhathan(succesorBoard,0);
             board_to_string(succesorBoard->state,char_temp);
-            str2 = std::string(char_temp);
+            str2.assign(char_temp);
             cc=explored.count(str2);
             if(cc==0){
                 new_node = (node *) malloc(sizeof(node));
-                new_node->f=new_node_f;
+                new_node->f== calculate_manhathan(succesorBoard,0);
                 new_node->state=succesorBoard;
                 open.push_back(new_node);
                 std::push_heap(open.begin(), open.end(),node_greater_than());
             }
             else
             {
-                //printf("is this it?\n");
-                //fflush(stdout);
                 free(succesorBoard);
-                //printf("it was not\n");
-                //fflush(stdout);
             }
         }
 

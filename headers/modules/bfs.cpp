@@ -4,13 +4,13 @@
 #define C_BFS
 extern "C"
 {
-    #include "../bfs.h"
+    
     #include "../queue.h"
     #include "../board.h"
     #include "../manhattan.h"
     #include "../hash.h"
 }
-
+#include "../bfs.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unordered_set>

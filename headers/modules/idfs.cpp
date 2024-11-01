@@ -4,13 +4,13 @@
 #define C_IDFS
 extern "C"
 {
-    #include "../idfs.h"
     #include "../queue.h"
     #include "../board.h"
     #include "../manhattan.h"
     #include "../hash.h"
+    #include "../result.h"
 }
-
+#include "../idfs.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unordered_set>

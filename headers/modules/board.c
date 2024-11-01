@@ -26,10 +26,10 @@ int isGoalstate(board *state)
     return 1;
 }
 
-void board_to_string(char *cin,char *out)
+void board_to_string(char cin[],char out[])
 {
     int i=0;
-    for(i=0;i<16;i++)
+    for(i=0;i<17;i++)
     {
         out[i] = cin[i]+48;
     }

@@ -1,14 +1,15 @@
-#ifndef H_IDFS
-#define H_IDFS
+#ifndef H_IDASTAR
+#define H_IDASTAR
 
-
+extern "C" {
     #include "board.h"
     #include "manhattan.h"
     #include "queue.h"
     #include "hash.h"
     #include "result.h"
+}
+    
 
 
-int execute_idfs(board *inicial_board);
-
+int execute_idastar(board *inicial_board);
 #endif

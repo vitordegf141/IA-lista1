@@ -196,7 +196,7 @@ int test_next_boards4(){
     for(i=0;i<board_size;i++)
         test_board.state[i]=sample_vec[i];
     findblankposition(&test_board);
-    printf("testing next_boards4 :\n");
+    printf("testing next_boards4 aqui  :\n");
     calculate_next_boards_printf_possible(&test_board);
     calculate_next_boards(&nexts,&test_board);
     
