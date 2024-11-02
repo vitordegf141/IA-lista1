@@ -7,7 +7,6 @@ extern "C"
     #include "../queue.h"
     #include "../board.h"
     #include "../manhattan.h"
-    #include "../hash.h"
     #include "../result.h"
 }
 #include "../gbfs.hpp"
@@ -77,7 +76,6 @@ int execute_gbfs(board *inicial_board)
         }
         board_to_string(currentboard->state,char_temp);
         std::string str(char_temp);
-        
         explored.insert(str);
         add_node_to_result(&res,calculate_manhathan(currentboard,0));
         calculate_next_boards(&nexts,currentboard);

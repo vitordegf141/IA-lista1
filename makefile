@@ -1,5 +1,5 @@
-main: main.cpp objects/inputreader.o objects/board.o objects/manhattan.o objects/bfs.o objects/queue.o objects/hash.o objects/idfs.o objects/astar.o objects/idastar.o objects/gbfs.o
-	g++ objects/result.o objects/hash.o  objects/inputreader.o objects/board.o objects/queue.o objects/manhattan.o objects/bfs.o objects/idfs.o objects/astar.o objects/idastar.o objects/gbfs.o main.cpp -O2 -o main 
+main: main.cpp objects/inputreader.o objects/board.o objects/manhattan.o objects/bfs.o objects/queue.o objects/idfs.o objects/astar.o objects/idastar.o objects/gbfs.o
+	g++ objects/result.o  objects/inputreader.o objects/board.o objects/queue.o objects/manhattan.o objects/bfs.o objects/idfs.o objects/astar.o objects/idastar.o objects/gbfs.o main.cpp -o main 
 
 test_board: tests/test_board.c objects/board.o
 	gcc objects/board.o tests/test_board.c -o  tests/run_tests/test_board
@@ -39,7 +39,7 @@ objects/idastar.o: objects/result.o objects/hash.o headers/modules/idastar.cpp o
 	g++ -o objects/idastar.o -c -O2 headers/modules/idastar.cpp
 
 objects/gbfs.o: objects/result.o objects/hash.o headers/modules/gbfs.cpp objects/board.o objects/manhattan.o objects/queue.o
-	g++ -o objects/gbfs.o -c -O2 headers/modules/gbfs.cpp
+	g++ -o objects/gbfs.o -c  headers/modules/gbfs.cpp
 
 clean:
 	rm objects/*

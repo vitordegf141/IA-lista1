@@ -8,7 +8,6 @@ extern "C"
     #include "../queue.h"
     #include "../board.h"
     #include "../manhattan.h"
-    #include "../hash.h"
 }
 #include "../bfs.hpp"
 #include <stdlib.h>

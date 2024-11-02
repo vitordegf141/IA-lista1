@@ -5,7 +5,6 @@ extern "C" {
     #include "board.h"
     #include "manhattan.h"
     #include "queue.h"
-    #include "hash.h"
     #include "result.h"
 }
 

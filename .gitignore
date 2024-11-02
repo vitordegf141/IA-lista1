@@ -3,5 +3,7 @@ tests/run_tests/*
 main
 main
 .vscode/settings.json
-compare.txt
-compare2.txt
+*.txt
+*.csv
+.pdf
+*.sh
