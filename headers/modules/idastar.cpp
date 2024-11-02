@@ -8,6 +8,7 @@ extern "C"
     #include "../board.h"
     #include "../manhattan.h"
     #include "../result.h"
+    
 }
 #include "../idastar.hpp"
 #include <stdlib.h>
@@ -17,6 +18,7 @@ extern "C"
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <climits>
 
 
 typedef struct node_s {
