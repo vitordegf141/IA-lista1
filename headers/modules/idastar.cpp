@@ -110,8 +110,6 @@ int execute_astar_with_threshold(board *inicial_board,int threshold,result *res,
             succesorBoard = nexts.next[i];
             if(isGoalstate(succesorBoard))
             {
-                printf("ACHOU GOAL\n");
-                fflush(stdout);
                 calculate_result(res,succesorBoard->cost);
                 print_result(res);
                 for(k=0;k<open.size();k++) {
@@ -119,7 +117,6 @@ int execute_astar_with_threshold(board *inicial_board,int threshold,result *res,
                     free(open[k]);
                 }
                 fflush(stdout);
-                getchar();
                 return -1;
             }
             
