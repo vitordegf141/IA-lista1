@@ -31,9 +31,13 @@ typedef struct node_s {
 struct node_greater_than {
     bool operator()(node *a, node *b) const {
         if(a->f == b->f) 
+        {
             if(a->h == b->h)
+            {
                 return a->order < b->order;
+            }
             return a->h > b->h;
+        }
         return a->f > b->f;
     }
 };
@@ -42,6 +46,7 @@ struct node_greater_than {
 int execute_astar(board *inicial_board)
 {
     int isfirst=1;
+    int whileRunCounter=0,searchIsTrueCounter=0;
     if(inicial_board == NULL)
         return 0;
     next_boards nexts;
@@ -85,13 +90,16 @@ int execute_astar(board *inicial_board)
         
         open.pop(); //n := open.pop min()
         board_to_string(currentboard->state,char_temp);
-        str2 = std::string(char_temp);
-        
+        str2 = std::string(char_temp);        
         auto search=distances.find(str2);
-        if(search == distances.end() ||   currentboard->cost < (search->second)){ //if distances.lookup(n.state) = none or g(n) < distances[n.state]
+        if(search == distances.end() ||   (currentboard->cost < search->second)){ //if distances.lookup(n.state) = none or g(n) < distances[n.state]
+            searchIsTrueCounter++;
             distances[str2]=currentboard->cost; //distances[n.state] := g(n)
+            
             if(isGoalstate(currentboard)) //if is goal(n.state):
             {
+                //printf("order  is = %ld\n",current->order);
+                printf("searchIsTrueCounter is =%d \n",searchIsTrueCounter);
                 calculate_result(&res,currentboard->cost);
                 print_result(&res);
                 while(open.empty()==false)
@@ -107,11 +115,10 @@ int execute_astar(board *inicial_board)
                 }
                 return 1;
             }
-            
+            add_node_to_result(&res,calculate_manhathan(currentboard,0));
             calculate_next_boards(&nexts,currentboard);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
-                succesorBoard = nexts.next[i];
-                add_node_to_result(&res,calculate_manhathan(succesorBoard,0));
+                succesorBoard = nexts.next[i];               
                 board_to_string(succesorBoard->state,char_temp);
                 str2 = std::string(char_temp);
                 new_node = (node *) malloc(sizeof(node));
@@ -128,6 +135,7 @@ int execute_astar(board *inicial_board)
             isfirst=0;
         else
             free(currentboard);
+        //printf("whileRunCounter = %d\n",whileRunCounter++);
         currentboard=NULL;
     }
     while(open.empty()==false)
