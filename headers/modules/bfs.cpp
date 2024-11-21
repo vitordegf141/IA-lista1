@@ -13,6 +13,7 @@ extern "C"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unordered_set>
+#include <queue>
 #include <string>
 #include <iostream>
 
@@ -26,14 +27,12 @@ int execute_bfs(board *inicial_board)
     int expanded_nodes =0;
     int prev_expanded_nodes =0;
     std::unordered_set<std::string> mySet;
+    std::queue<board *> nodesQueue;
     mySet.clear();
-    queue_reset();
     char char_temp[17] = {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
     init_result(&res,calculate_manhathan(inicial_board,0));
     inicial_board->cost=0;
-    if(!queue_is_empty())
-        printf("QUEUE should be empty now");
-    pushQueue(inicial_board);
+    nodesQueue.push(inicial_board);
     if(isGoalstate(inicial_board))
     {
         calculate_result(&res,0);
@@ -42,9 +41,10 @@ int execute_bfs(board *inicial_board)
     }
     int k=0;
     int cc;
-    while(!queue_is_empty())
+    while(nodesQueue.empty()==false)
     {
-        currentBoard = popQueue();
+        currentBoard = nodesQueue.front();
+        nodesQueue.pop();
         expanded_nodes++;
         prev_expanded_nodes =expanded_nodes;
         nexts.number_of_moves=0;            
@@ -63,13 +63,18 @@ int execute_bfs(board *inicial_board)
             {
                 calculate_result(&res,succesorBoard->cost);
                 print_result(&res);
-                queue_reset();
+                while(nodesQueue.empty()==false)
+                {
+                    currentBoard = nodesQueue.front();
+                    free(currentBoard);
+                    nodesQueue.pop();
+                }
                 mySet.clear();
                 return 1;
             }
             
             if(cc==0){
-                pushQueue(succesorBoard);
+                nodesQueue.push(succesorBoard);
             }
             else
             {
