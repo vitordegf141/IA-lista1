@@ -41,6 +41,7 @@ struct node_greater_than {
 
 int execute_astar(board *inicial_board)
 {
+    int isfirst=1;
     if(inicial_board == NULL)
         return 0;
     next_boards nexts;
@@ -95,8 +96,13 @@ int execute_astar(board *inicial_board)
                 print_result(&res);
                 while(open.empty()==false)
                 {
-                    free(open.top()->state);
-                    free(open.top());
+                    if(open.top()->state !=NULL)
+                        free(open.top()->state);
+                    open.top()->state =NULL;
+                    node *aux = open.top();
+                    if(aux !=NULL)
+                        free(aux);
+                    
                     open.pop();
                 }
                 return 1;
@@ -105,7 +111,7 @@ int execute_astar(board *inicial_board)
             calculate_next_boards(&nexts,currentboard);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
                 succesorBoard = nexts.next[i];
-                add_node_to_result(&res,calculate_manhathan(currentboard,0));
+                add_node_to_result(&res,calculate_manhathan(succesorBoard,0));
                 board_to_string(succesorBoard->state,char_temp);
                 str2 = std::string(char_temp);
                 new_node = (node *) malloc(sizeof(node));
@@ -117,12 +123,17 @@ int execute_astar(board *inicial_board)
             }
         }
         //free(current);
-       // free(currentboard);
+        current =NULL;
+        if(isfirst==1)
+            isfirst=0;
+        else
+            free(currentboard);
+        currentboard=NULL;
     }
     while(open.empty()==false)
     {
-        //free(open.top()->state);
-        //free(open.top());
+        free(open.top()->state);
+        free(open.top());
         open.pop();
     }
     return 1;
