@@ -64,7 +64,6 @@ int execute_astar(board *inicial_board)
     inicial_board->cost=0;
     std::string str2;
     std::priority_queue<node*, std::vector<node*>, node_greater_than> open (open_v.begin(), open_v.end(),node_greater_than()); //open := new MinHeap ordered by ⟨f , h⟩
-    std::unordered_map<std::string,int> distances;// distances := new HashTable
     std::unordered_set<std::string> closed; //closed := new HashSet
     node *root = (node *) malloc(sizeof(node));
     node *current = NULL;
