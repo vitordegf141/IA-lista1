@@ -141,13 +141,14 @@ int test_next_boards2(){
     board_side_size=3;
     board test_board;
     next_boards nexts;
+    test_board.last_move=moveDown;
     nexts.number_of_moves=0;
     int i;
     int sample_vec[] = {1, 8, 7, 5, 0, 4, 2, 3,6};
     for(i=0;i<board_size;i++)
         test_board.state[i]=sample_vec[i];
     findblankposition(&test_board);
-    printf("testing next_boards2 :\n");    
+    printf("****\ntesting next_boards2 :\n");    
     calculate_next_boards(&nexts,&test_board);
     
     printf("printing before board:\n");
@@ -190,6 +191,7 @@ int test_next_boards4(){
     board_side_size=3;
     board test_board;
     next_boards nexts;
+    test_board.last_move=moveRight;
     nexts.number_of_moves=0;
     int i;
     int sample_vec[] = {1, 2, 5, 3, 4, 8, 6, 7, 0};

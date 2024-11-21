@@ -9,7 +9,7 @@
 
 int board_side_size;
 int board_size;
-
+//not used
 typedef struct can_moves_s{
      int can_up;
      int can_left;
@@ -69,8 +69,20 @@ void calculate_next_boards_printf_possible(board *state)
     printf("\n");
 }
 
-board *make_move(board *state, int next_blank_position)
+board *make_move(board *state, int next_blank_position, int move_type)
 {
+    if(state == NULL)
+    {
+        printf("ERROR father state is NULL");
+        fflush(stdout);
+        return NULL;
+    }
+    if(state->last_move == moveUp && move_type == moveDown || state->last_move == moveDown && move_type == moveUp || state->last_move == moveLeft && move_type == moveRight || state->last_move == moveRight && move_type == moveLeft)
+    {
+        printf("ERROR move type is the opposite as last move");
+        fflush(stdout);
+        return NULL;
+    }
     board *next_board = (board *)malloc(sizeof(board));
     int i;
     for (i = 0; i < board_size; i++)
@@ -80,6 +92,7 @@ board *make_move(board *state, int next_blank_position)
     next_board->state[state->blankposition] = aux;
     next_board->blankposition = next_blank_position;
     next_board->cost = state->cost +1;
+    next_board->last_move = move_type;
     return next_board;
 }
 
@@ -102,7 +115,7 @@ void add_at_next(next_boards *nexts, board *newstate)
     nexts->number_of_moves++;
 
 }
-
+///not used
 can_moves *calculates_can_moves(board *state)
 {// not used
     can_moves * moves = (can_moves *) malloc(sizeof(can_moves));
@@ -133,14 +146,14 @@ void calculate_next_boards(next_boards *nexts, board *state)
     int up_new = state->blankposition - board_side_size;
     int right_new = y + 1;
     int left_new = y - 1;
-    if (up_new >= 0)
-        add_at_next(nexts,make_move(state,up_new));
-    if (left_new >= 0)
-        add_at_next(nexts,make_move(state,state->blankposition-1));
-    if (right_new < board_side_size)
-        add_at_next(nexts,make_move(state,state->blankposition+1));
-    if (down_new < board_size)
-        add_at_next(nexts,make_move(state,down_new));
+    if (up_new >= 0 && state->last_move!=moveDown)
+        add_at_next(nexts,make_move(state,up_new,moveUp));
+    if (left_new >= 0&& state->last_move!=moveRight)
+        add_at_next(nexts,make_move(state,state->blankposition-1,moveLeft));
+    if (right_new < board_side_size && state->last_move!=moveLeft)
+        add_at_next(nexts,make_move(state,state->blankposition+1,moveRight));
+    if (down_new < board_size && state->last_move!=moveUp)
+        add_at_next(nexts,make_move(state,down_new,moveDown));
     
 }
 

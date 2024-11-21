@@ -174,6 +174,7 @@ int alt_method(int argc,char *argv[], all_boards *boards)
                 boards->boards[i].state[j] =alt_get_value_from_string(argv[(i*board_size)+j+2],argv[(i*board_size)+j+2+1]==NULL);
         boards->boards[i].blankposition=findblankposition(&boards->boards[i]);
         boards->boards[i].heurisc_value=-1;
+        boards->boards[i].last_move=initial;
     }
     
     return number_of_matrix;

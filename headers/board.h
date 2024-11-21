@@ -6,12 +6,18 @@
 
 
 #define STATE_SIZE 17
+#define moveUp 1
+#define moveDown 2
+#define moveRight 3
+#define moveLeft 4
+#define initial -1
 
 typedef struct board_struct{
     char state[STATE_SIZE];
     int blankposition;
     int heurisc_value;
     int cost;
+    int last_move;
 } board;
 
 typedef struct all_boards_struct
