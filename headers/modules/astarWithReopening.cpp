@@ -65,7 +65,6 @@ int execute_astar(board *inicial_board)
     std::string str2;
     std::priority_queue<node*, std::vector<node*>, node_greater_than> open (open_v.begin(), open_v.end(),node_greater_than()); //open := new MinHeap ordered by ⟨f , h⟩
     std::unordered_map<std::string,int> distances;// distances := new HashTable
-    std::unordered_set<std::string> closed; //closed := new HashSet
     node *root = (node *) malloc(sizeof(node));
     node *current = NULL;
     board *currentboard = NULL;
@@ -92,11 +91,11 @@ int execute_astar(board *inicial_board)
         open.pop(); //n := open.pop min()
         board_to_string(currentboard->state,char_temp);
         str2 = std::string(char_temp);        
-        auto search=closed.count(str2);
-        if(search==0){ //if n.state ∈/ closed:
-            closed.insert(str2);//closed.insert(n)
-            add_node_to_result(&res,calculate_manhathan(currentboard,0));
+        auto search=distances.find(str2);
+        if(search == distances.end() ||   (currentboard->cost < search->second)){ //if distances.lookup(n.state) = none or g(n) < distances[n.state]
             searchIsTrueCounter++;
+            distances[str2]=currentboard->cost; //distances[n.state] := g(n)
+            
             if(isGoalstate(currentboard)) //if is goal(n.state):
             {
                 //printf("order  is = %ld\n",current->order);
@@ -116,6 +115,7 @@ int execute_astar(board *inicial_board)
                 }
                 return 1;
             }
+            add_node_to_result(&res,calculate_manhathan(currentboard,0));
             calculate_next_boards(&nexts,currentboard);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
                 succesorBoard = nexts.next[i];               
