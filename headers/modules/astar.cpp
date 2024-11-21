@@ -13,35 +13,39 @@ extern "C"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unordered_set>
+#include <unordered_map>
 #include <string>
 #include <iostream>
 #include <algorithm>
 #include <vector>
-
+#include <queue>
 
 typedef struct node_s {
     int f;
+    int h;
+    long order;
     board *state;
 } node;
 // https://stackoverflow.com/questions/2574060/c-min-heap-with-user-defined-type
 
 struct node_greater_than {
     bool operator()(node *a, node *b) const {
+        if(a->f == b->f) 
+            if(a->h == b->h)
+                return a->order < b->order;
+            return a->h > b->h;
         return a->f > b->f;
     }
 };
 
-int new_node_f;
-
-bool test_find(node *a)  {
-        return a->f == new_node_f;
-    }
 
 int execute_astar(board *inicial_board)
 {
+    if(inicial_board == NULL)
+        return 0;
     next_boards nexts;
     result res;
-    int i, cc,k;
+    int i,count=0;   
     init_result(&res,calculate_manhathan(inicial_board,0));
     if(isGoalstate(inicial_board))
     {
@@ -50,81 +54,77 @@ int execute_astar(board *inicial_board)
         return 0;
     }
     char char_temp[17] = {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
-    std::vector<node*> open;
+    std::vector<node*> open_v;
     inicial_board->cost=0;
     std::string str2;
-    std::unordered_set<std::string> explored;
-    std::make_heap(open.begin(), open.end(),node_greater_than());
+    std::priority_queue<node*, std::vector<node*>, node_greater_than> open (open_v.begin(), open_v.end(),node_greater_than()); //open := new MinHeap ordered by ⟨f , h⟩
+    std::unordered_map<std::string,int> distances;// distances := new HashTable
     node *root = (node *) malloc(sizeof(node));
     node *current = NULL;
     board *currentboard = NULL;
     board *succesorBoard = NULL;
     node *new_node;
     root->f=0;
+    root->h = calculate_manhathan(inicial_board,0);
     root->state=inicial_board;
-    open.push_back(root);
-    std::push_heap(open.begin(), open.end(),node_greater_than());
-    while(!open.empty())
+    open.push(root);
+    board_to_string(inicial_board->state,char_temp);
+    std::string str(char_temp);
+    //distances[str]=0;
+    while(open.empty()==false) //while not open.is empty():
     {
-        std::pop_heap(open.begin(), open.end(),node_greater_than());
-        current = open.back();
-        open.pop_back();
+        current = open.top();
         currentboard = current->state;
-        //getchar();
-        if(isGoalstate(currentboard))
+        if(current == NULL)
         {
-            calculate_result(&res,0);
-            print_result(&res);
-            return 0;
+            printf("current is null\n");
+            fflush(stdout);
+            break;
         }
+        
+        open.pop(); //n := open.pop min()
         board_to_string(currentboard->state,char_temp);
-        std::string str(char_temp);
-        explored.insert(str);
-        add_node_to_result(&res,calculate_manhathan(currentboard,0));
-        calculate_next_boards(&nexts,currentboard);
-        for(i=0;i<nexts.number_of_moves;i++){
-            
-            succesorBoard = nexts.next[i];
-            if(isGoalstate(succesorBoard))
+        str2 = std::string(char_temp);
+        
+        auto search=distances.find(str2);
+        if(search == distances.end() ||   currentboard->cost < (search->second)){ //if distances.lookup(n.state) = none or g(n) < distances[n.state]
+            distances[str2]=currentboard->cost; //distances[n.state] := g(n)
+            if(isGoalstate(currentboard)) //if is goal(n.state):
             {
-                calculate_result(&res,succesorBoard->cost);
+                calculate_result(&res,currentboard->cost);
                 print_result(&res);
-                for(k=0;k<open.size();k++) {
-                    free(open[k]->state);
-                    free(open[k]);
+                while(open.empty()==false)
+                {
+                    free(open.top()->state);
+                    free(open.top());
+                    open.pop();
                 }
-                open.clear();
-                explored.clear();
                 return 1;
             }
-            new_node_f = succesorBoard->cost + calculate_manhathan(succesorBoard,0);
-            board_to_string(succesorBoard->state,char_temp);
-            str2 = std::string(char_temp);
-            cc=explored.count(str2);
-            if(cc==0){
+            
+            calculate_next_boards(&nexts,currentboard);
+            for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
+                succesorBoard = nexts.next[i];
+                add_node_to_result(&res,calculate_manhathan(currentboard,0));
+                board_to_string(succesorBoard->state,char_temp);
+                str2 = std::string(char_temp);
                 new_node = (node *) malloc(sizeof(node));
-                new_node->f=new_node_f;
-                new_node->state=succesorBoard;
-                open.push_back(new_node);
-                std::push_heap(open.begin(), open.end(),node_greater_than());
-            }
-            else
-            {
-                //printf("is this it?\n");
-                //fflush(stdout);
-                free(succesorBoard);
-                //printf("it was not\n");
-                //fflush(stdout);
+                new_node->h = + calculate_manhathan(succesorBoard,0);
+                new_node->f=succesorBoard->cost + new_node->h;
+                new_node->order=count++;
+                new_node->state=succesorBoard; //n′:= make node(n, a,s′)
+                open.push(new_node);//open.insert(n′)   
             }
         }
-
+        //free(current);
+       // free(currentboard);
     }
-    explored.clear();
-    for(k=0;k<open.size();k++) {
-        free(open[k]->state);
-        free(open[k]);
+    while(open.empty()==false)
+    {
+        //free(open.top()->state);
+        //free(open.top());
+        open.pop();
     }
-    open.clear();
     return 1;
 }
 

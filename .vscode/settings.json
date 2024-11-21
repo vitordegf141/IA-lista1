@@ -58,6 +58,7 @@
         "xutility": "cpp",
         "set": "cpp",
         "xtree": "cpp",
-        "climits": "cpp"
+        "climits": "cpp",
+        "unordered_map": "cpp"
     }
 }
