@@ -42,7 +42,7 @@ int execute_bfs(board *inicial_board)
     open.push_back(inicial_board); //open.push back(make root node())
     board_to_string(inicial_board->state,char_temp);
     std::string str(char_temp);
-    closed.insert(str); //closed.insert(init())
+    closed.insert(closed.begin(),str); //closed.insert(init())
     
     int k=0;
     int cc;
@@ -68,12 +68,12 @@ int execute_bfs(board *inicial_board)
                 return 1;
             }
             board_to_string(succesorBoard->state,char_temp);// if s′ ∈/ closed:
-            std::string str2(char_temp);
-            cc=closed.count(str2);            
-            if(cc==0){
+            std::string str2(char_temp);            
+            if(closed.find(str2)==closed.end()) //if s′ ∈/ closed:
+            {
                 board_to_string(succesorBoard->state,char_temp); 
                 std::string str(char_temp);
-                closed.insert(str);// closed.insert(s′)
+                closed.insert(closed.begin(),str);// closed.insert(s′)
                 open.push_back(succesorBoard); //open.push back(n′)
             }
             else

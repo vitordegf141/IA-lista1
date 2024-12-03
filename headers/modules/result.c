@@ -44,7 +44,7 @@ void calculate_result(result *res, int otimal_cost)
     stop_time_count(res);
     res->time_passed = ((double)(res->final_time - res->inicial_time) +123)/CLOCKS_PER_SEC;
     if(res->nodes_expanded != 0)
-        res->average_heurisctic = res->total_heuristic/ res->nodes_expanded;
+        res->average_heurisctic =(double) res->total_heuristic/ res->nodes_expanded;
     res->otimal_cost=otimal_cost;
 } 
 

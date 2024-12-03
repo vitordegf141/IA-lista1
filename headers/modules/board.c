@@ -29,11 +29,11 @@ int isGoalstate(board *state)
 void board_to_string(char cin[],char out[])
 {
     int i=0;
-    for(i=0;i<17;i++)
+    for(i=0;i<board_size;i++)
     {
         out[i] = cin[i]+48;
     }
-    out[16]='\0';
+    out[board_size]='\0';
 }
 
 int findblankposition(board *state)
@@ -119,6 +119,11 @@ void add_at_next(next_boards *nexts, board *newstate)
 can_moves *calculates_can_moves(board *state)
 {// not used
     can_moves * moves = (can_moves *) malloc(sizeof(can_moves));
+    if(moves == NULL)
+    {
+        printf("ERROR malloc in calculates_can_moves\n");
+        fflush(stdout);
+    }
     moves->can_down,moves->can_left,moves->can_right,moves->can_up=0;
     int x = (int)state->blankposition / board_side_size;
     int y = state->blankposition % board_side_size;
@@ -139,6 +144,7 @@ can_moves *calculates_can_moves(board *state)
 
 void calculate_next_boards(next_boards *nexts, board *state)
 {
+    state->blankposition = findblankposition(state);
     nexts->number_of_moves=0;
     int x = (int)state->blankposition / board_side_size;
     int y = state->blankposition % board_side_size;
@@ -164,7 +170,7 @@ void print_board(board *state)
     {
         for(j=0;j<board_side_size;j++)
         {
-            printf("%d ",state->state[i*board_side_size+j]);
+            printf("%d ",state->state[(i*board_side_size)+j]);
         }
         printf("\n");
     }

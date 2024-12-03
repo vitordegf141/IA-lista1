@@ -30,15 +30,13 @@ typedef struct node_s {
 
 struct node_greater_than {
     bool operator()(node *a, node *b) const {
-        if(a->f == b->f) 
-        {
-            if(a->h == b->h)
-            {
-                return a->order < b->order;
-            }
+        if(a->h != b->h)
             return a->h > b->h;
-        }
-        return a->f > b->f;
+        if(a->f != b->f)
+            return a->f > b->f;
+        
+        return a->order < b->order;
+        
     }
 };
 
@@ -53,6 +51,7 @@ int execute_astar(board *inicial_board)
     result res;
     int i,count=0;   
     init_result(&res,calculate_manhathan(inicial_board,0));
+    //add_node_to_result(&res,calculate_manhathan(inicial_board,0));
     if(isGoalstate(inicial_board))
     {
         calculate_result(&res,0);
@@ -70,16 +69,18 @@ int execute_astar(board *inicial_board)
     board *currentboard = NULL;
     board *succesorBoard = NULL;
     node *new_node;
-    root->f=0;
-    root->h = calculate_manhathan(inicial_board,0);
+    root->f=calculate_manhathan(inicial_board,0);;
+    root->h =0+calculate_manhathan(inicial_board,0);
     root->state=inicial_board;
     open.push(root);
     board_to_string(inicial_board->state,char_temp);
     std::string str(char_temp);
     //distances[str]=0;
+    
     while(open.empty()==false) //while not open.is empty():
     {
         current = open.top();
+        open.pop(); //n := open.pop min()
         currentboard = current->state;
         if(current == NULL)
         {
@@ -88,18 +89,15 @@ int execute_astar(board *inicial_board)
             break;
         }
         
-        open.pop(); //n := open.pop min()
         board_to_string(currentboard->state,char_temp);
         str2 = std::string(char_temp);        
-        auto search=closed.count(str2);
-        if(search==0){ //if n.state ∈/ closed:
-            closed.insert(str2);//closed.insert(n)
-            add_node_to_result(&res,calculate_manhathan(currentboard,0));
+
+        if(closed.find(str2)==closed.end()){ //if n.state ∈/ closed:
+            closed.insert(closed.begin(),str2);//closed.insert(n)
+            
             searchIsTrueCounter++;
             if(isGoalstate(currentboard)) //if is goal(n.state):
             {
-                //printf("order  is = %ld\n",current->order);
-                printf("searchIsTrueCounter is =%d \n",searchIsTrueCounter);
                 calculate_result(&res,currentboard->cost);
                 print_result(&res);
                 while(open.empty()==false)
@@ -115,15 +113,15 @@ int execute_astar(board *inicial_board)
                 }
                 return 1;
             }
+            add_node_to_result(&res,calculate_manhathan(currentboard,0));
             calculate_next_boards(&nexts,currentboard);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
                 succesorBoard = nexts.next[i];               
-                board_to_string(succesorBoard->state,char_temp);
-                str2 = std::string(char_temp);
                 new_node = (node *) malloc(sizeof(node));
-                new_node->h = + calculate_manhathan(succesorBoard,0);
-                new_node->f=succesorBoard->cost + new_node->h;
-                new_node->order=count++;
+                new_node->f = calculate_manhathan(succesorBoard,0);
+                new_node->h= succesorBoard->cost + new_node->f;
+                count++;
+                new_node->order=count+1;
                 new_node->state=succesorBoard; //n′:= make node(n, a,s′)
                 open.push(new_node);//open.insert(n′)   
             }

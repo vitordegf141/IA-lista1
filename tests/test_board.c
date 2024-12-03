@@ -4,25 +4,42 @@
 #include "../headers/board.h"
 
 
-void assert(int value, int expected)
+int assert(int value, int expected)
 {
     if(value==expected)
-        printf(" PASSED");
+    {
+        printf(" PASSED\n");
+        return 1;
+    }
+        
     else
-        printf("FAILED");
-    printf("\n");
+    {
+        printf("FAILED\n");
+        return 0;
+    }
+        
 }
 
 int test_goal_board()
 {
     board_size=9;
+    board_side_size=3;
     board goal_board;
     int i;
     for(i=0;i<board_size;i++)
         goal_board.state[i]=i;
+    for(i=0;i<board_size;i++)
+        printf("%d ",goal_board.state[i]);
+    printf("testing goal board:\n");
+    print_board(&goal_board);
+    printf("\n ");
     int is_goal = isGoalstate(&goal_board);
     printf("testing isGoalState is goal:");
-    assert(is_goal,1);
+    if(assert(is_goal,1)==0)
+    {
+        print_board(&goal_board);
+        return 1;
+    }
 }
 
 int test_goal_board_fail()
@@ -214,6 +231,89 @@ int test_next_boards4(){
 }
 
 
+int test_next_boards5(){
+    printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+    board_size=9;
+    board_side_size=3;
+    board test_board;
+    next_boards nexts;
+    test_board.last_move=moveLeft;
+    nexts.number_of_moves=0;
+    int i;
+    int sample_vec[] = {3, 1, 2, 6, 4, 5, 7, 0, 8};
+    for(i=0;i<board_size;i++)
+        test_board.state[i]=sample_vec[i];
+    findblankposition(&test_board);
+    printf("testing next_boards5 aqui  :\n");
+    calculate_next_boards_printf_possible(&test_board);
+    calculate_next_boards(&nexts,&test_board);
+    
+    printf("printing before board:\n");
+    print_board(&test_board);
+    for(i=0;i<nexts.number_of_moves;i++)
+    {
+        printf("printing next board: %d\n",i);
+        print_board(nexts.next[i]);
+    }
+        
+    //assert(test_board.blankposition,6);
+}
+int test_next_boards6(){
+    printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+    board_size=9;
+    board_side_size=3;
+    board test_board;
+    next_boards nexts;
+    test_board.last_move=moveLeft;
+    nexts.number_of_moves=0;
+    int i;
+    int sample_vec[] = {3, 1, 2, 6, 4, 5, 0, 7, 8};
+    for(i=0;i<board_size;i++)
+        test_board.state[i]=sample_vec[i];
+    findblankposition(&test_board);
+    printf("testing next_boards6 aqui  :\n");
+    calculate_next_boards_printf_possible(&test_board);
+    calculate_next_boards(&nexts,&test_board);
+    
+    printf("printing before board:\n");
+    print_board(&test_board);
+    for(i=0;i<nexts.number_of_moves;i++)
+    {
+        printf("printing next board: %d\n",i);
+        print_board(nexts.next[i]);
+    }
+        
+    //assert(test_board.blankposition,6);
+}
+int test_next_boards7(){
+    printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+    board_size=9;
+    board_side_size=3;
+    board test_board;
+    next_boards nexts;
+    test_board.last_move=moveUp;
+    nexts.number_of_moves=0;
+    int i;
+    int sample_vec[] = {3, 1, 2, 0, 4, 5, 6, 7, 8};
+    for(i=0;i<board_size;i++)
+        test_board.state[i]=sample_vec[i];
+    findblankposition(&test_board);
+    printf("testing next_boards7 aqui  :\n");
+    calculate_next_boards_printf_possible(&test_board);
+    calculate_next_boards(&nexts,&test_board);
+    
+    printf("printing before board:\n");
+    print_board(&test_board);
+    for(i=0;i<nexts.number_of_moves;i++)
+    {
+        printf("printing next board: %d\n",i);
+        if(isGoalstate(nexts.next[i])==1)
+            printf("eeeh goal state\n");
+        print_board(nexts.next[i]);
+    }
+        
+    //assert(test_board.blankposition,6);
+}
 int main()
 {
     test_goal_board();
@@ -227,4 +327,7 @@ int main()
     test_next_boards2();
     test_next_boards3();
     test_next_boards4();
+    test_next_boards5();
+    test_next_boards6();
+    test_next_boards7();
 }
