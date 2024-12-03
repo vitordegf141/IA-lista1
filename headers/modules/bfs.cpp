@@ -50,7 +50,7 @@ int execute_bfs(board *inicial_board)
     {
         currentBoard = open.front();
         open.pop_front(); //n := open.pop front()                 
-        add_node_to_result(&res,calculate_manhathan(currentBoard,0));       
+        IncreaseNodesExpanded(&res);       
         calculate_next_boards(&nexts,currentBoard);      //succ(n.state):
         for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
             succesorBoard = nexts.next[i];

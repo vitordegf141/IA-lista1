@@ -11,6 +11,7 @@ typedef struct result_struct{
     int total_heuristic;
     int inicial_heurisctic;
     int nodes_expanded;
+    int heuristics_calculated;
     double average_heurisctic;
     int otimal_cost;
 } result;
@@ -21,5 +22,6 @@ void init_result(result *res, int inicial_heuristic);
 void add_node_to_result(result *res,int heurisctic);
 void calculate_result(result *res, int otimal_cost);
 void print_result(result *res);
-
+void IncreaseNodesExpanded(result *res);
+void AddHeuristicToResult(result *res, int heurisctic);
 #endif

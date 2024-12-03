@@ -69,7 +69,8 @@ int execute_astar(board *inicial_board)
     board *currentboard = NULL;
     board *succesorBoard = NULL;
     node *new_node;
-    root->f=calculate_manhathan(inicial_board,0);;
+    root->f=calculate_manhathan(inicial_board,0);
+    AddHeuristicToResult(&res,root->f);
     root->h =0+calculate_manhathan(inicial_board,0);
     root->state=inicial_board;
     open.push(root);
@@ -113,12 +114,13 @@ int execute_astar(board *inicial_board)
                 }
                 return 1;
             }
-            add_node_to_result(&res,calculate_manhathan(currentboard,0));
+            IncreaseNodesExpanded(&res);
             calculate_next_boards(&nexts,currentboard);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
                 succesorBoard = nexts.next[i];               
                 new_node = (node *) malloc(sizeof(node));
                 new_node->f = calculate_manhathan(succesorBoard,0);
+                AddHeuristicToResult(&res,new_node->f);
                 new_node->h= succesorBoard->cost + new_node->f;
                 count++;
                 new_node->order=count+1;
