@@ -20,14 +20,22 @@ extern "C"
 
 
 typedef struct node_s {
-    int f;
+    int h;
+    int g;
+    int order;
     board *state;
 } node;
 // https://stackoverflow.com/questions/2574060/c-min-heap-with-user-defined-type
 
 struct node_greater_than {
     bool operator()(node *a, node *b) const {
-        return a->f > b->f;
+        if(a->h != b->h)
+            return a->h > b->h;
+        if(a->g != b->g)
+            return a->g < b->g;
+        
+        return a->order < b->order;
+        
     }
 };
 
@@ -55,8 +63,8 @@ int execute_gbfs(board *inicial_board)
     board *currentboard = NULL;
     board *succesorBoard = NULL;
     node *new_node;
-    int hull=0;
-    root->f=0;
+    int count=0;
+    root->h=0;
     root->state=inicial_board;
     open.push_back(root);
     std::push_heap(open.begin(), open.end(),node_greater_than());
@@ -77,9 +85,9 @@ int execute_gbfs(board *inicial_board)
         board_to_string(currentboard->state,char_temp);
         std::string str(char_temp);
         explored.insert(str);
-        add_node_to_result(&res,calculate_manhathan(currentboard,0));
+        IncreaseNodesExpanded(&res);
         calculate_next_boards(&nexts,currentboard);
-        hull++;
+        
         for(i=0;i<nexts.number_of_moves;i++){
             
             succesorBoard = nexts.next[i];
@@ -97,11 +105,13 @@ int execute_gbfs(board *inicial_board)
             }
             board_to_string(succesorBoard->state,char_temp);
             str2.assign(char_temp);
-            cc=explored.count(str2);
-            if(cc==0){
+            if(explored.find(str2)==explored.end()){
                 new_node = (node *) malloc(sizeof(node));
-                new_node->f== calculate_manhathan(succesorBoard,0);
+                new_node->h= calculate_manhathan(succesorBoard,0);
+                AddHeuristicToResult(&res,new_node->h);
+                new_node->g=succesorBoard->cost;
                 new_node->state=succesorBoard;
+                new_node->order=count++;
                 open.push_back(new_node);
                 std::push_heap(open.begin(), open.end(),node_greater_than());
             }
