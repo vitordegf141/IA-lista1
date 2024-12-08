@@ -25,15 +25,35 @@ int isGoalstate(board *state)
             return 0;
     return 1;
 }
-
+inline
 void board_to_string(char cin[],char out[])
 {
     int i=0;
-    for(i=0;i<board_size;i++)
+    int temp=0;
+    if(board_size==9)
     {
-        out[i] = cin[i]+48;
+        for(i=0;i<board_size;i++)
+        {
+            out[i] = cin[i]+48;
+        }
+        out[board_size]='\0';
     }
-    out[board_size]='\0';
+    else if (board_size==16)
+    {
+        for(i=0;i<23;i++)
+        {
+            if(cin[i]>=10)
+            {
+                out[i] ='1';
+                i++;
+                out[i] = (cin[i]%10)+48;
+            }
+            else
+                out[i] = cin[i]+48;
+        }
+        out[board_size]='\0';
+    }
+    
 }
 
 int findblankposition(board *state)
