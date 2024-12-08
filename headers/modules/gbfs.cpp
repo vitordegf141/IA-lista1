@@ -51,7 +51,7 @@ int execute_gbfs(board *inicial_board)
     next_boards nexts;
     result res;
     int i,count=0;   
-    init_result(&res,calculate_manhathan(inicial_board,0));
+    init_result(&res,calculate_manhathan(inicial_board));
     //add_node_to_result(&res,calculate_manhathan(inicial_board,0));
     if(isGoalstate(inicial_board))
     {
@@ -70,7 +70,7 @@ int execute_gbfs(board *inicial_board)
     board *currentboard = NULL;
     board *succesorBoard = NULL;
     node *new_node;
-    root->h=calculate_manhathan(inicial_board,0);
+    root->h=calculate_manhathan(inicial_board);
     AddHeuristicToResult(&res,root->h);
     root->g = 0;
     root->state=inicial_board;
@@ -120,7 +120,7 @@ int execute_gbfs(board *inicial_board)
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
                 succesorBoard = nexts.next[i];               
                 new_node = (node *) malloc(sizeof(node));
-                new_node->h = calculate_manhathan(succesorBoard,0);
+                new_node->h = calculate_manhathan(succesorBoard);
                 AddHeuristicToResult(&res,new_node->h);
                 new_node->g= succesorBoard->cost + new_node->h;
                 new_node->order=count++;

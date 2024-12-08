@@ -23,7 +23,7 @@ int execute_idfs(board *inicial_board)
 {
     int i, maxdepth=1,found =0;
     result res;
-    init_result(&res,calculate_manhathan(inicial_board,0));
+    init_result(&res,calculate_manhathan(inicial_board));
     if(isGoalstate(inicial_board))
     {
         calculate_result(&res,inicial_board->cost);
@@ -61,14 +61,14 @@ int dfs(board *currentboard,int depth,result *res)
     {
         //printf("achou goal  \n");
         //fflush(stdout);
-        add_node_to_result(res,calculate_manhathan(currentboard,0));
+        add_node_to_result(res,calculate_manhathan(currentboard));
         calculate_result(res,currentboard->cost);
         print_result(res);
         return 1;//return ()
     }
     if(depth>0)//if depth limit > 0
     {
-        add_node_to_result(res,calculate_manhathan(currentboard,0));
+        add_node_to_result(res,calculate_manhathan(currentboard));
         //printf("depth limit: %d\n",depth);
         //nexts.number_of_moves=0;
         //print_board(currentboard);

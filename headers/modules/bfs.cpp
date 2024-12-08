@@ -23,7 +23,7 @@ int execute_bfs(board *inicial_board)
     next_boards nexts;
     int i=0, test_contains;
     result res;
-    init_result(&res,calculate_manhathan(inicial_board,0));
+    init_result(&res,calculate_manhathan(inicial_board));
     if(isGoalstate(inicial_board)) //if is goal(init()):
     {
         calculate_result(&res,0);

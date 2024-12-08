@@ -5,19 +5,20 @@
 #define H_BOARD
 
 
-#define STATE_SIZE 17
+#define STATE_SIZE 16
 #define moveUp 1
 #define moveDown 2
 #define moveRight 3
 #define moveLeft 4
 #define initial -1
 
+
 typedef struct board_struct{
     char state[STATE_SIZE];
-    int blankposition;
-    int heurisc_value;
-    int cost;
-    int last_move;
+    unsigned char blankposition;
+    unsigned char heurisc_value;
+    unsigned char cost;
+    unsigned char last_move;
 } board;
 
 typedef struct all_boards_struct
@@ -40,4 +41,5 @@ void print_board(board *state);
 void calculate_next_boards_printf_possible(board *state);
 int compare_boards(board *state1,board *state2);
 void calculate_next_boards(next_boards *nexts, board *state);
+unsigned long long int hashing_board(board *state);
 #endif

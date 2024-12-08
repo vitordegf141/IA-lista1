@@ -6,6 +6,7 @@
 #include "../board.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int board_side_size;
 int board_size;
@@ -17,24 +18,56 @@ typedef struct can_moves_s{
      int can_down;
 } can_moves;
 
+char goal_board9[] = {0,1,2,3,4,5,6,7,8};
+char goal_board16[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 int isGoalstate(board *state)
 {
-    int i;
-    for (i = 0; i < board_size; i++)
-        if (i != state->state[i])
-            return 0;
-    return 1;
+    return memcmp(state->state, goal_board16, board_size) == 0;
+    //int i;
+    //for (i = 0; i < board_size; i++)
+    //    if (i != state->state[i])
+    //        return 0;
+    //return 1;
+    
 }
 
 void board_to_string(char cin[],char out[])
 {
-    int i=0;
-    for(i=0;i<board_size;i++)
+    int i=0,j=0;
+    if(board_size==9)
     {
-        out[i] = cin[i]+48;
+        for(i=0;i<board_size;i++)
+        {
+            out[i] = cin[i]+48;
+        }
     }
-    out[board_size]='\0';
+    else
+    {
+        for(i=0;i<board_size;i++)
+        {
+            if(cin[i]>=10)
+            {
+                out[j] = '1';
+                j++;
+                out[j] = cin[i]%10+48;
+            }
+            else
+                out[j] = cin[i]+48;
+            j++;
+        }
+    }
+    out[22]='\0';
     
+}
+
+unsigned long long int hashing_board(board *state)
+{
+    unsigned long long int hash=0;
+    for(int i = 0; i < board_size; i++) {
+            hash = hash << 4;
+            hash = hash|state->state[i];
+    }
+    return hash;
 }
 
 int findblankposition(board *state)
@@ -86,8 +119,7 @@ board *make_move(board *state, int next_blank_position, int move_type)
     }
     board *next_board = (board *)malloc(sizeof(board));
     int i;
-    for (i = 0; i < board_size; i++)
-        next_board->state[i] = state->state[i];
+    memcpy(next_board->state, state->state, 16);
     int aux = next_board->state[next_blank_position];
     next_board->state[next_blank_position] = next_board->state[state->blankposition];
     next_board->state[state->blankposition] = aux;

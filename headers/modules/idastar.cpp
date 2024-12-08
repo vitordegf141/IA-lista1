@@ -40,9 +40,9 @@ int execute_astar_with_threshold(board *inicial_board,int threshold,result *res,
 int execute_idastar(board *inicial_board)
 {
     result res;
-    int threshold=calculate_manhathan(inicial_board,0);
+    int threshold=calculate_manhathan(inicial_board);
     int found =0;
-    init_result(&res,calculate_manhathan(inicial_board,0));
+    init_result(&res,calculate_manhathan(inicial_board));
     if(isGoalstate(inicial_board))
     {
         calculate_result(&res,0);
@@ -91,7 +91,7 @@ int execute_astar_with_threshold(board *currentboard,int threshold,result *res, 
     for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
         
         succesorBoard = nexts.next[i];
-        succesorBoard->heurisc_value = calculate_manhathan(succesorBoard,0);
+        succesorBoard->heurisc_value = calculate_manhathan(succesorBoard);
         AddHeuristicToResult(res,succesorBoard->heurisc_value);
         if(succesorBoard->heurisc_value<INT_MAX)
         {

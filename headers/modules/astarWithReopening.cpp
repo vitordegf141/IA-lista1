@@ -52,7 +52,7 @@ int execute_astar(board *inicial_board)
     next_boards nexts;
     result res;
     int i,count=0;   
-    init_result(&res,calculate_manhathan(inicial_board,0));
+    init_result(&res,calculate_manhathan(inicial_board));
     if(isGoalstate(inicial_board))
     {
         calculate_result(&res,0);
@@ -71,7 +71,7 @@ int execute_astar(board *inicial_board)
     board *succesorBoard = NULL;
     node *new_node;
     root->f=0;
-    root->h = calculate_manhathan(inicial_board,0);
+    root->h = calculate_manhathan(inicial_board);
     root->state=inicial_board;
     open.push(root);
     board_to_string(inicial_board->state,char_temp);
@@ -115,14 +115,14 @@ int execute_astar(board *inicial_board)
                 }
                 return 1;
             }
-            add_node_to_result(&res,calculate_manhathan(currentboard,0));
+            add_node_to_result(&res,calculate_manhathan(currentboard));
             calculate_next_boards(&nexts,currentboard);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
                 succesorBoard = nexts.next[i];               
                 board_to_string(succesorBoard->state,char_temp);
                 str2 = std::string(char_temp);
                 new_node = (node *) malloc(sizeof(node));
-                new_node->h = + calculate_manhathan(succesorBoard,0);
+                new_node->h = + calculate_manhathan(succesorBoard);
                 new_node->f=succesorBoard->cost + new_node->h;
                 new_node->order=count++;
                 new_node->state=succesorBoard; //n′:= make node(n, a,s′)

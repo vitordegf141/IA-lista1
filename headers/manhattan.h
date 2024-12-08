@@ -3,5 +3,5 @@
 
 #include "board.h"
 
-int calculate_manhathan(board *state,int print);
+int calculate_manhathan(board *state);
 #endif

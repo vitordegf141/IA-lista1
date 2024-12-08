@@ -87,7 +87,7 @@ char alt_get_value_from_string(char string[], int is_last)
         exit(1);
     }
     strcpy(aux_string,string);
-    aux_string[end_of_string]='\0';
+    //aux_string[end_of_string]='\0';
     return atoi(aux_string);
 }
 
