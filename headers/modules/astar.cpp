@@ -19,6 +19,7 @@ extern "C"
 #include <algorithm>
 #include <vector>
 #include <queue>
+#include <climits>
 
 typedef struct node_s {
     int f;
@@ -59,13 +60,13 @@ int execute_astar(board *inicial_board)
         print_result(&res);
         return 0;
     }
-    char char_temp[23] = {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
+    char char_temp[17] = {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','\0'};
     std::vector<node*> open_v;
     inicial_board->cost=0;
     std::string str2;
     int state_in_int=0;
     std::priority_queue<node*, std::vector<node*>, node_greater_than> open (open_v.begin(), open_v.end(),node_greater_than()); //open := new MinHeap ordered by ⟨f , h⟩
-    std::unordered_set<unsigned long int> closed; //closed := new HashSet
+    std::unordered_set< std::string> closed; //closed := new HashSet
     node *root = (node *) malloc(sizeof(node));
     node *current = NULL;
     board *currentboard = NULL;
@@ -79,7 +80,6 @@ int execute_astar(board *inicial_board)
     open.push(root);
     board_to_string(inicial_board->state,char_temp);
     std::string str(char_temp);
-    //distances[str]=0;
     
     while(open.empty()==false) //while not open.is empty():
     {
@@ -88,12 +88,9 @@ int execute_astar(board *inicial_board)
         currentboard = current->state;
         
         board_to_string(currentboard->state,char_temp);
-        char *end=NULL;     
-        unsigned long hash = strtoul(char_temp,&end,16);
-        //printf("before closed char_temp = %s strtoll = %lld\n",char_temp,hash);
-        if(closed.find(hash)==closed.end()){ //if n.state ∈/ closed:
-            closed.insert(closed.begin(),hash);//closed.insert(n)
-            //printf("entrou finded \n");
+        str2=std::string(char_temp);
+        if(closed.find(str2)==closed.end()){ //if n.state ∈/ closed:
+            closed.insert(closed.begin(),str2);//closed.insert(n)
             if(isGoalstate(currentboard)) //if is goal(n.state):
             {
                 calculate_result(&res,currentboard->cost);
