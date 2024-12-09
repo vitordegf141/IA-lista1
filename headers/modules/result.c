@@ -33,18 +33,18 @@ void init_result(result *res, int inicial_heuristic){
     //printf("res->nodes_expanded after = %d \n",res->nodes_expanded);
     //getchar();
 }
-
+inline
 void add_node_to_result(result *res,int heurisctic)
 {
     res->total_heuristic +=heurisctic;
     res->nodes_expanded++;
 }
-
+inline
 void IncreaseNodesExpanded(result *res)
 {
     res->nodes_expanded++;
 }
-
+inline
 void AddHeuristicToResult(result *res, int heurisctic)
 {
     res->total_heuristic +=heurisctic;
@@ -65,7 +65,7 @@ void print_result(result *res)
 {
     printf("%d,%d,%f,",res->nodes_expanded,res->otimal_cost,res->time_passed);
     if(res->average_heurisctic != 0)
-        printf("%f,",res->average_heurisctic);
+        printf("%Lf,",res->average_heurisctic);
     else
         printf("0,");
     printf("%d\n",res->inicial_heurisctic);

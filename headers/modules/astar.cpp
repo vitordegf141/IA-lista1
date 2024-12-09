@@ -22,16 +22,11 @@ extern "C"
 #include <climits>
 #include <cstring>
 
-typedef struct node_s {
-    unsigned char f;
-    unsigned char h;
-    unsigned int order;
-    board *state;
-} node;
+
 // https://stackoverflow.com/questions/2574060/c-min-heap-with-user-defined-type
 char goal_boardastar[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
 struct node_greater_than {
-    bool operator()(node *a, node *b) const {
+    bool operator()(astar_node *a, astar_node *b) const {
         if(a->h != b->h)
             return a->h > b->h;
         if(a->f != b->f)
@@ -64,50 +59,40 @@ int execute_astar(board *inicial_board)
     char char_temp[23] = {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','\0'};
     //printf("size of board = %ld  size of long long int = %ld\n",sizeof(board));
 
-    std::vector<node*> open_v;
+    std::vector<astar_node*> open_v;
     inicial_board->cost=0;
     std::string str2;
     int state_in_int=0;
-    std::priority_queue<node*, std::vector<node*>, node_greater_than> open (open_v.begin(), open_v.end(),node_greater_than()); //open := new MinHeap ordered by ⟨f , h⟩
+    std::priority_queue<astar_node*, std::vector<astar_node*>, node_greater_than> open (open_v.begin(), open_v.end(),node_greater_than()); //open := new MinHeap ordered by ⟨f , h⟩
     std::unordered_set< unsigned long long int> closed; //closed := new HashSet
-    node *root = (node *) malloc(sizeof(node));
-    node *current = NULL;
-    board *currentboard = NULL;
+    astar_node *root = (astar_node *) malloc(sizeof(astar_node));
+    astar_node *current = NULL;
     board *succesorBoard = NULL;
-    node *new_node;
+    astar_node *new_node;
     root->f=calculate_manhathan(inicial_board);
     AddHeuristicToResult(&res,root->f);
     init_result(&res,root->f);
     root->h =0+root->f;
-    root->state=inicial_board;
+    root->hash=hashing_board(inicial_board);
     open.push(root);
-    //board_to_string(inicial_board->state,char_temp);
-    std::string str(inicial_board->state,board_size);
+
     
     while(open.empty()==false) //while not open.is empty():
     {
         current = open.top();
         open.pop(); //n := open.pop min()
-        currentboard = current->state;
         
-        //board_to_string(currentboard->state,char_temp);
-        //str2=std::string(currentboard->state,board_size);
-        unsigned long long int hash = hashing_board(currentboard);
-        //printf("char_temp %s hash %lld\n",char_temp,hash);
-        //getchar();
-        if(closed.find(hash)==closed.end()){ //if n.state ∈/ closed:
-            closed.insert(closed.begin(),hash);//closed.insert(n)
-            if(memcmp(currentboard->state, goal_boardastar, board_size) == 0) //if is goal(n.state):
+        if(closed.find(current->hash)==closed.end()){ //if n.state ∈/ closed:
+            closed.insert(closed.begin(),current->hash);//closed.insert(n)
+            if(isGoalstateASTAR(current->hash)) //if is goal(n.state):
             {
-                calculate_result(&res,currentboard->cost);
+                calculate_result(&res,current->h - current->f);
                 print_result(&res);
                 
                 while(open.empty()==false)
                 {
-                    if(open.top()->state !=NULL)
-                        free(open.top()->state);
-                    open.top()->state =NULL;
-                    node *aux = open.top();
+                    
+                    astar_node *aux = open.top();
                     if(aux !=NULL)
                         free(aux);
                     
@@ -116,31 +101,25 @@ int execute_astar(board *inicial_board)
                 return 1;
             }
             IncreaseNodesExpanded(&res);
-            calculate_next_boards(&nexts,currentboard);
+            calculate_next_boardsastar(&nexts,current);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
-                succesorBoard = nexts.next[i];               
-                new_node = (node *) malloc(sizeof(node));
+                succesorBoard = nexts.next[i];             
+                new_node = (astar_node *) malloc(sizeof(astar_node));
                 new_node->f = calculate_manhathan(succesorBoard);
                 AddHeuristicToResult(&res,new_node->f);
                 new_node->h= succesorBoard->cost + new_node->f;
+                new_node->last_move=succesorBoard->last_move;
                 count++;
                 new_node->order=count+1;
-                new_node->state=succesorBoard; //n′:= make node(n, a,s′)
+                new_node->hash=hashing_board(succesorBoard); //n′:= make node(n, a,s′)
                 open.push(new_node);//open.insert(n′)   
+                free(succesorBoard);
             }
         }
-        //free(current);
-        current =NULL;
-        if(isfirst==1)
-            isfirst=0;
-        else
-            free(currentboard);
-        //printf("whileRunCounter = %d\n",whileRunCounter++);
-        currentboard=NULL;
+        free(current);
     }
     while(open.empty()==false)
     {
-        free(open.top()->state);
         free(open.top());
         open.pop();
     }

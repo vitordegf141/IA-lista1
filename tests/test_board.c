@@ -314,20 +314,94 @@ int test_next_boards7(){
         
     //assert(test_board.blankposition,6);
 }
+
+void testhasing()
+{
+    printf("testing hashing\n");
+    board_size=16;
+    board_side_size=4;
+    board test_board;
+    int sample_vec[] ={3, 15, 2, 5, 11, 6, 4, 7, 12, 9, 1, 0, 13, 14, 10, 8};
+    //./main -astar 3 15 2 5 11 6 4 7 12 9 1 0 13 14 10 8
+    int i;
+    for(i=0;i<board_size;i++)
+        test_board.state[i]=sample_vec[i];
+
+    unsigned long long hash = hashing_board(&test_board);
+    board *test_board2=unhash_board(hash);
+    print_board(test_board2);
+}
+
+void printgoal16hash()
+{
+    printf("testing hashing\n");
+    board_size=16;
+    board_side_size=4;
+    board test_board;
+    int sample_vec[] ={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    //./main -astar 3 15 2 5 11 6 4 7 12 9 1 0 13 14 10 8
+    int i;
+    for(i=0;i<board_size;i++)
+        test_board.state[i]=sample_vec[i];
+    unsigned long long hash = hashing_board(&test_board);
+    printf("goal hash %lld\n",hash);
+    board *test_board2=unhash_board(hash);
+    print_board(test_board2);
+}
+void printgoal9hash()
+{
+    printf("testing hashing\n");
+    board_size=9;
+    board_side_size=3;
+    board test_board;
+    int sample_vec[] ={0, 1, 2, 3, 4, 5, 6, 7, 8};
+    //./main -astar 3 15 2 5 11 6 4 7 12 9 1 0 13 14 10 8
+    int i;
+    for(i=0;i<board_size;i++)
+        test_board.state[i]=sample_vec[i];
+    unsigned long long hash = hashing_board(&test_board);
+    printf("goal hash %lld\n",hash);
+    board *test_board2=unhash_board(hash);
+    print_board(test_board2);
+}
+
+void testing_findinggoal16()
+{
+    printf("testing goal hitting\n");
+    board_size=16;
+    board_side_size=4;
+    board test_board;
+    int sample_vec[] ={0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    //./main -astar 3 15 2 5 11 6 4 7 12 9 1 0 13 14 10 8
+    int i;
+    for(i=0;i<board_size;i++)
+        test_board.state[i]=sample_vec[i];
+    unsigned long long hash = hashing_board(&test_board);
+    printf("goal hash %lld\n",hash);
+    board *test_board2=unhash_board(hash);
+    print_board(test_board2);
+    printf("goal hash %lld isgoal? %d\n",hash,isGoalstateASTAR(hash));
+}
+
 int main()
 {
-    test_goal_board();
-    test_goal_board_fail();
-    test_findblank();
-    test_next_boards_prints();
-    test_next_boards_prints2();
-    test_next_boards_prints3();
-    test_next_boards_prints4();
-    test_next_boards();
-    test_next_boards2();
-    test_next_boards3();
-    test_next_boards4();
-    test_next_boards5();
-    test_next_boards6();
-    test_next_boards7();
+    //test_goal_board();
+    //test_goal_board_fail();
+    //test_findblank();
+    //test_next_boards_prints();
+    //test_next_boards_prints2();
+    //test_next_boards_prints3();
+    //test_next_boards_prints4();
+    //test_next_boards();
+    //test_next_boards2();
+    //test_next_boards3();
+    //test_next_boards4();
+    //test_next_boards5();
+    //test_next_boards6();
+    //test_next_boards7();
+    printf("PQP next_boards7\n");
+    testhasing();
+    printgoal16hash();
+    printgoal9hash();
+    testing_findinggoal16();
 }

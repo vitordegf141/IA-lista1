@@ -8,11 +8,11 @@ typedef struct result_struct{
     clock_t inicial_time;
     clock_t final_time;
     double time_passed;
-    int total_heuristic;
+    unsigned long int total_heuristic;
     int inicial_heurisctic;
     int nodes_expanded;
     int heuristics_calculated;
-    double average_heurisctic;
+    long double average_heurisctic;
     int otimal_cost;
 } result;
 

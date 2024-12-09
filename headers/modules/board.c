@@ -20,6 +20,8 @@ typedef struct can_moves_s{
 
 char goal_board9[] = {0,1,2,3,4,5,6,7,8};
 char goal_board16[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+unsigned long long int goal_state16 = 81985529216486895;
+unsigned long long int goal_state9 = 305419896;
 int isGoalstate(board *state)
 {
     return memcmp(state->state, goal_board16, board_size) == 0;
@@ -30,7 +32,16 @@ int isGoalstate(board *state)
     //return 1;
     
 }
+inline 
+int isGoalstateASTAR(unsigned long long int state)
+{
+    if(board_size ==9)
+        return state == goal_state9;
+    else
+        return state == goal_state16;
 
+    
+}
 void board_to_string(char cin[],char out[])
 {
     int i=0,j=0;
@@ -70,6 +81,25 @@ unsigned long long int hashing_board(board *state)
     return hash;
 }
 
+board* unhash_board(unsigned long long int hash){
+    unsigned long long int mask=15;
+    
+    unsigned long long int tile=0;
+    char shit;
+    board *state = (board *)malloc(sizeof(board));
+    int i;
+    for (i = 0; i < board_size; i++) {
+        tile = hash & mask;
+        tile = tile >> 4*i;
+        //printf("%lld  ",tile);
+        shit = shit|tile;
+        //printf("%d\n",shit);
+        state->state[board_size-i-1] = tile;
+        mask = mask << 4;
+    }
+    return state;
+}
+
 int findblankposition(board *state)
 {
     int i;
@@ -105,19 +135,21 @@ void calculate_next_boards_printf_possible(board *state)
 
 board *make_move(board *state, int next_blank_position, int move_type)
 {
-    if(state == NULL)
-    {
-        printf("ERROR father state is NULL");
-        fflush(stdout);
-        return NULL;
-    }
-    if(state->last_move == moveUp && move_type == moveDown || state->last_move == moveDown && move_type == moveUp || state->last_move == moveLeft && move_type == moveRight || state->last_move == moveRight && move_type == moveLeft)
-    {
-        printf("ERROR move type is the opposite as last move");
-        fflush(stdout);
-        return NULL;
-    }
+
     board *next_board = (board *)malloc(sizeof(board));
+    int i;
+    memcpy(next_board->state, state->state, 16);
+    int aux = next_board->state[next_blank_position];
+    next_board->state[next_blank_position] = next_board->state[state->blankposition];
+    next_board->state[state->blankposition] = aux;
+    next_board->blankposition = next_blank_position;
+    next_board->cost = state->cost +1;
+    next_board->last_move = move_type;
+    return next_board;
+}
+
+board * make_moveastar(board *state, board *next_board, int next_blank_position, int move_type)
+{
     int i;
     memcpy(next_board->state, state->state, 16);
     int aux = next_board->state[next_blank_position];
@@ -136,14 +168,9 @@ int compare_boards(board *state1,board *state2){
             return 0;
     return 1;
 }
-
+inline
 void add_at_next(next_boards *nexts, board *newstate)
 {
-
-    if (nexts == NULL || newstate == NULL || (nexts->number_of_moves<0 && nexts->number_of_moves>3))
-    {
-        printf("add_at_next nexts is NULL or newstate is NULL or nexts->number_of_moves is not between 0 and 3");
-    }
     nexts->next[nexts->number_of_moves]=newstate;
     nexts->number_of_moves++;
 
@@ -152,11 +179,6 @@ void add_at_next(next_boards *nexts, board *newstate)
 can_moves *calculates_can_moves(board *state)
 {// not used
     can_moves * moves = (can_moves *) malloc(sizeof(can_moves));
-    if(moves == NULL)
-    {
-        printf("ERROR malloc in calculates_can_moves\n");
-        fflush(stdout);
-    }
     moves->can_down,moves->can_left,moves->can_right,moves->can_up=0;
     int x = (int)state->blankposition / board_side_size;
     int y = state->blankposition % board_side_size;
@@ -177,7 +199,7 @@ can_moves *calculates_can_moves(board *state)
 
 void calculate_next_boards(next_boards *nexts, board *state)
 {
-    state->blankposition = findblankposition(state);
+    //state->blankposition = findblankposition(state);
     nexts->number_of_moves=0;
     int x = (int)state->blankposition / board_side_size;
     int y = state->blankposition % board_side_size;
@@ -195,6 +217,36 @@ void calculate_next_boards(next_boards *nexts, board *state)
         add_at_next(nexts,make_move(state,down_new,moveDown));
     
 }
+
+void calculate_next_boardsastar(next_boards *nexts, astar_node *node)
+{
+    //state->blankposition = findblankposition(state);
+    board *state = unhash_board(node->hash);
+    state->blankposition=findblankposition(state);
+    
+    
+    state->cost=node->h - node->f;
+    state->last_move=node->last_move;
+    //printf("state unhashed\n");
+    //print_board(state);
+    nexts->number_of_moves=0;
+    int x = (int)state->blankposition / board_side_size;
+    int y = state->blankposition % board_side_size;
+    int down_new = state->blankposition + board_side_size;
+    int up_new = state->blankposition - board_side_size;
+    int right_new = y + 1;
+    int left_new = y - 1;
+    if (up_new >= 0 && state->last_move!=moveDown)
+        add_at_next(nexts,make_move(state,up_new,moveUp));
+    if (left_new >= 0&& state->last_move!=moveRight)
+        add_at_next(nexts,make_move(state,state->blankposition-1,moveLeft));
+    if (right_new < board_side_size && state->last_move!=moveLeft)
+        add_at_next(nexts,make_move(state,state->blankposition+1,moveRight));
+    if (down_new < board_size && state->last_move!=moveUp)
+        add_at_next(nexts,make_move(state,down_new,moveDown));
+    
+}
+
 
 void print_board(board *state)
 {
