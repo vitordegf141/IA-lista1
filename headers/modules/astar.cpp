@@ -74,6 +74,7 @@ int execute_astar(board *inicial_board)
     init_result(&res,root->f);
     root->h =0+root->f;
     root->hash=hashing_board(inicial_board);
+    root->last_move=-3;
     open.push(root);
 
     
@@ -81,7 +82,7 @@ int execute_astar(board *inicial_board)
     {
         current = open.top();
         open.pop(); //n := open.pop min()
-        
+        //printf("current->hash = %llu\n",current->hash);
         if(closed.find(current->hash)==closed.end()){ //if n.state ∈/ closed:
             closed.insert(closed.begin(),current->hash);//closed.insert(n)
             if(isGoalstateASTAR(current->hash)) //if is goal(n.state):
@@ -98,12 +99,15 @@ int execute_astar(board *inicial_board)
                     
                     open.pop();
                 }
+                closed.clear();
                 return 1;
             }
             IncreaseNodesExpanded(&res);
             calculate_next_boardsastar(&nexts,current);
             for(i=0;i<nexts.number_of_moves;i++){ //for each ⟨a,s′⟩ ∈ succ(n.state):
-                succesorBoard = nexts.next[i];             
+                //printf("interacton i = %d\n",i);
+                succesorBoard = nexts.next[i];
+                //print_board(succesorBoard);             
                 new_node = (astar_node *) malloc(sizeof(astar_node));
                 new_node->f = calculate_manhathan(succesorBoard);
                 AddHeuristicToResult(&res,new_node->f);
@@ -112,7 +116,9 @@ int execute_astar(board *inicial_board)
                 count++;
                 new_node->order=count+1;
                 new_node->hash=hashing_board(succesorBoard); //n′:= make node(n, a,s′)
+                //printf("new_node->hash = %llu\n",new_node->hash);
                 open.push(new_node);//open.insert(n′)   
+                //getchar();
                 free(succesorBoard);
             }
         }

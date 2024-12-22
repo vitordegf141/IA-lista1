@@ -138,7 +138,7 @@ int alt_method(int argc,char *argv[], all_boards *boards)
     int is_nine= (input_lenght%9 ==0);
     int is_sixteen = (input_lenght%16 ==0);
     if(!is_nine && !is_sixteen){
-        printf("BAD INPUT");
+        printf("BAD INPUT\n");
         exit(1);
     }
 

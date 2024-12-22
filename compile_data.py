@@ -31,5 +31,11 @@ for key in dicionario:
     print(key)
     print(dicionario[key])
 
-
+count =0
+for key in dicionario:
+    results = dicionario[key]
+    for result in results:
+        if(result[2]>30):
+            count+=1
+print(f"\n\n** count = {count}")
 # Print the resulting list of tuples
